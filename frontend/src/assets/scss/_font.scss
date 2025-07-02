@@ -1,0 +1,12 @@
+@mixin font-face($name, $file) {
+  @font-face {
+    font-family: $name;
+    src: url("../fonts/#{$file}.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+  }
+}
+
+@include font-face("i", "Inter-Regular");
+@include font-face("i-m", "Inter-Medium");
+@include font-face("i-b", "Inter-Bold");
