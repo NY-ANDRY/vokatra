@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\T_commandes;
 use App\Models\T_factures;
+use App\Models\T_stocks_produits;
 use App\Models\V_commandes;
 use App\Models\V_commandes_produits;
 use App\Models\V_factures;
@@ -35,6 +36,8 @@ class Factures extends Controller
             $facture->utilisateur_id = $user;
         }
         $facture->save();
+
+        T_stocks_produits::registerFacture($facture->id);
 
         $commande = T_commandes::find($commande_id);
         $commande->statut_id = 3;
