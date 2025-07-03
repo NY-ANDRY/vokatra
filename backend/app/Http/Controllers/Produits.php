@@ -33,4 +33,5 @@ class Produits extends Controller
 
         return $result;
     }
+
 }

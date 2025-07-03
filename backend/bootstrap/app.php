@@ -11,8 +11,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
-    })
+        $middleware->validateCsrfTokens(except: [
+            'stripe/*', // Exclut toutes les routes commençant par 'stripe/'
+            'webhook/paypal', // Exclut une route spécifique
+            '*', // Exclut une URL complète
+        ]);    })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
     })->create();

@@ -55,12 +55,30 @@ CREATE TABLE t_produit_images (
     FOREIGN KEY (produit_id) REFERENCES t_produits(id)
 );
 
-CREATE TABLE t_produit_stocks (
+CREATE TABLE t_stocks_mouvements (
+    id SERIAL PRIMARY KEY,
+    type_mouvement VARCHAR(100) NOT NULL UNIQUE,
+    description TEXT
+);
+
+INSERT INTO t_stocks_mouvements (type_mouvement, description) VALUES
+('Entrée Stock', ' '),
+('Sortie Vente', ' '),
+('Retour Fournisseur', ' '),
+('Retour Client', ' '),
+('Perte/Casse', ' '),
+('Ajustement Positif', ' '),
+('Ajustement Négatif', ' '),
+('Transfert Interne', ' ');
+
+CREATE TABLE t_stocks_produits (
     id SERIAL PRIMARY KEY,
     produit_id INT,
     quantite DECIMAL(10,2),
+  	mouvement_id INT,
     date_maj TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (produit_id) REFERENCES t_produits(id)
+    FOREIGN KEY (produit_id) REFERENCES t_produits(id),
+ 		FOREIGN KEY (mouvement_id) REFERENCES t_stocks_mouvements(id)
 );
 
 CREATE VIEW v_produits AS
@@ -76,7 +94,7 @@ SELECT
     COALESCE(SUM(ps.quantite), 0) AS stock
 FROM t_produits p
 JOIN t_categories c ON p.categorie_id = c.id
-LEFT JOIN t_produit_stocks ps ON p.id = ps.produit_id
+LEFT JOIN t_stocks_produits ps ON p.id = ps.produit_id
 GROUP BY p.id, c.nom;
 
 CREATE TABLE t_statuts_packs (
@@ -123,7 +141,7 @@ CREATE TABLE t_panier_produits (
     panier_id INT,
     produit_id INT,
     quantite DECIMAL(10,2),
-    FOREIGN KEY (panier_id) REFERENCES t_paniers(id),
+    FOREIGN KEY (panier_id) REFERENCES t_paniers(id) ON DELETE CASCADE,
     FOREIGN KEY (produit_id) REFERENCES t_produits(id)
 );
 
@@ -132,7 +150,7 @@ CREATE TABLE t_panier_packs (
     panier_id INT,
     pack_id INT,
     quantite INT,
-    FOREIGN KEY (panier_id) REFERENCES t_paniers(id),
+    FOREIGN KEY (panier_id) REFERENCES t_paniers(id) ON DELETE CASCADE,
     FOREIGN KEY (pack_id) REFERENCES t_packs(id)
 );
 
@@ -184,15 +202,17 @@ INSERT INTO t_statuts_factures (id, nom) VALUES
 (1, 'En attente de paiement'),
 (2, 'Payée'),
 (3, 'Partiellement payée'),
-(4, 'Annulée'),
-(5, 'En retard');
+(4, 'Annulée');
 
 CREATE TABLE t_factures (
     id SERIAL PRIMARY KEY,
+  	utilisateur_id INT,
+  	nom_client VARCHAR(50),
     commande_id INT,
     date_facture TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     montant_total DECIMAL(10,2),
     statut_id INT,
+  	FOREIGN KEY (utilisateur_id) REFERENCES t_utilisateurs(id),
     FOREIGN KEY (statut_id) REFERENCES t_statuts_factures(id),
     FOREIGN KEY (commande_id) REFERENCES t_commandes(id)
 );
@@ -217,6 +237,7 @@ INSERT INTO t_statuts_livraisons (id, nom) VALUES
 (4, 'Échec de livraison'),
 (5, 'Annulée');
 
+
 CREATE TABLE t_livraisons_lieux (
     id SERIAL PRIMARY KEY,
     nom VARCHAR(100),
@@ -240,3 +261,85 @@ CREATE TABLE t_livraisons (
     FOREIGN KEY (commande_id) REFERENCES t_commandes(id),    
     FOREIGN KEY (lieu_livraison_id) REFERENCES t_livraisons_lieux(id)
 );
+
+
+CREATE VIEW v_activite_quotidienne AS
+SELECT
+    DATE(f.date_facture) AS date_jour,
+    SUM(f.montant_total) AS recettes
+FROM
+    t_factures f
+WHERE
+    f.statut_id = 2 -- L'ID 2 correspond à 'Payée'
+GROUP BY
+    DATE(f.date_facture)
+ORDER BY
+    date_jour;
+    
+CREATE OR REPLACE VIEW v_activite_mensuelle AS
+SELECT
+    -- Construire une date réelle (type DATE) à partir de l'année et du mois groupés
+    MAKE_DATE(EXTRACT(YEAR FROM f.date_facture)::INT, EXTRACT(MONTH FROM f.date_facture)::INT, 1) AS date_mois,
+    SUM(f.montant_total) AS recettes
+FROM
+    t_factures f
+WHERE
+    f.statut_id = 2 -- L'ID 2 correspond à 'Payée'
+GROUP BY
+    EXTRACT(YEAR FROM f.date_facture),
+    EXTRACT(MONTH FROM f.date_facture)
+ORDER BY
+    date_mois;
+    
+-- CREATE TABLE t_stocks_produits (
+--     id SERIAL PRIMARY KEY,
+--     produit_id INT,
+--     quantite DECIMAL(10,2),
+--   	mouvement_id INT,
+--     date_maj TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+--     FOREIGN KEY (produit_id) REFERENCES t_produits(id),
+--  		FOREIGN KEY (mouvement_id) REFERENCES t_stocks_mouvements(id)
+-- );
+
+CREATE OR REPLACE VIEW v_produit_quotidienne AS 
+SELECT
+		p.nom as nom,
+    p.id as id_produit,
+    SUM(ps.quantite) as quantite,
+    DATE(ps.date_maj) as date_maj
+FROM t_stocks_produits as ps
+JOIN t_produits as p ON ps.produit_id = p.id
+GROUP BY
+		p.id,
+		DATE(ps.date_maj)
+ORDER BY
+		DATE(ps.date_maj);
+
+
+CREATE OR REPLACE VIEW v_paniers_produits AS
+SELECT 
+	pp.*,
+  prd.nom as produit_nom,
+  prd.description as produit_description,
+  prd.prix as produit_prix,
+  prd.categorie_id as categorie_id,
+  ctg.nom as categorie_nom,
+  (prd.prix * pp.quantite) as total
+FROM t_panier_produits AS pp
+JOIN t_produits AS prd ON pp.produit_id = prd.id
+JOIN t_categories AS ctg ON ctg.id = prd.categorie_id;
+
+
+CREATE OR REPLACE VIEW v_commandes_produits AS
+SELECT 
+	cp.*,
+  prd.nom as produit_nom,
+  prd.description as produit_description,
+  prd.prix as produit_prix,
+  prd.categorie_id as categorie_id,
+  ctg.nom as categorie_nom,
+  (prd.prix * cp.quantite) as total
+FROM t_commandes_produits AS cp
+JOIN t_produits AS prd ON cp.produit_id = prd.id
+JOIN t_categories AS ctg ON ctg.id = prd.categorie_id;
+

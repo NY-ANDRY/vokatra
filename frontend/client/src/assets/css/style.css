@@ -1,0 +1,30 @@
+@import "tailwindcss";
+@import "react-datepicker/dist/react-datepicker.css";
+@import "./datePicker.css";
+
+::selection {
+  background: #949494;
+}
+
+.active {
+  color: white;
+}
+
+@font-face {
+  font-family: "i";
+  src: url("../fonts/Inter-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "i-m";
+  src: url("../fonts/Inter-Medium.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "i-b";
+  src: url("../fonts/Inter-Bold.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}

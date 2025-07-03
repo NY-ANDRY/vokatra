@@ -7,7 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class V_produits extends Model
 {
     protected $table = 'v_produits';
-    public static function filterByKeywords($keywords) {
+
+    public static function filterByKeywords($keywords)
+    {
 
         return self::where('nom', 'like', "%{$keywords}%")
             ->orWhere('description', 'like', "%{$keywords}%")
@@ -16,5 +18,6 @@ class V_produits extends Model
             ->orWhere('stock', 'like', "%{$keywords}%")
             ->orderBy('id')
             ->get();
+
     }
 }

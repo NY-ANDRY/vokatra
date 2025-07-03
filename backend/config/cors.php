@@ -17,7 +17,7 @@ return [
     'paths' => ['api/*', 'sanctum/csrf-cookie'], // Ensure your API routes are included
     'allowed_methods' => ['*'], // Or specify methods like ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
     'allowed_origins' => [
-        'http://localhost:5173', // **THIS IS CRUCIAL: Add your frontend URL**
+        '*', // **THIS IS CRUCIAL: Add your frontend URL**
         // 'http://127.0.0.1:5173', // If your frontend sometimes runs on 127.0.0.1
         // 'http://localhost:3000', // If you have other local frontend setups
         // Add your production frontend URL(s) when deploying, e.g., 'https://your-frontend-domain.com'
