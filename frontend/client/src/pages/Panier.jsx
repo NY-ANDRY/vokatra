@@ -105,7 +105,7 @@ const Products = () => {
         <div className="flex w-full justify-center">
             <div className="w-[1100px]">
 
-                <div className="pt-8 pb-4 text-xl">
+                <div className="pt-2 pb-4 text-xl">
                     Panier numero: {data.panier && data.panier.id}
                 </div>
 
@@ -129,7 +129,7 @@ const Products = () => {
                                     <Td>{item.quantite}</Td>
                                     <Td>{item.total}</Td>
                                     <Td>
-                                        <div className="flex items-center gap-2">
+                                        <div className="flex w-6 xl:w-auto flex-col xl:flex-row items-center gap-2">
                                             <div onClick={() => handleDelete(item.id, item.produit_id)} className="flex items-center justify-center hover:bg-neutral-400 active:bg-neutral-600 rounded-sm">
                                                 <img src="/assets/svg/delete.svg" alt="" />
                                             </div>

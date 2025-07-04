@@ -16,10 +16,12 @@ import {
 } from 'recharts';
 import { CustomTooltip } from "../components/Tooltip/CustomToolTip";
 import { useNavigate } from "react-router-dom";
+import { usePanier } from "../contexts/PanierContext";
 
 const Products = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const { setOpenPanier } = usePanier();
 
     const { data: product, loading: loading_product, error: error_product } = useFetch(`${host}/produits/${id}`);
     const [item, setItem] = useState([]);
@@ -28,10 +30,14 @@ const Products = () => {
     const [qtt_prix, setQtt_prix] = useState(0);
 
     useEffect(() => {
+        setOpenPanier(false);
+    }, []);
+
+    useEffect(() => {
         if (!isNaN(Number(quantity)) && !isNaN(Number(item.prix))) {
-        let qtt = Number(quantity);
-        let prix = Number(item.prix);
-        setQtt_prix(qtt * prix);
+            let qtt = Number(quantity);
+            let prix = Number(item.prix);
+            setQtt_prix(qtt * prix);
         }
     }, [quantity]);
 
@@ -72,7 +78,8 @@ const Products = () => {
             }
             const result = await response.json();
             if (result.ok) {
-                navigate("/panier");
+                setOpenPanier(true);
+                navigate("/products");
             }
         } catch (err) {
             console.log(err.message);
@@ -88,14 +95,13 @@ const Products = () => {
             <div className="w-[1100px] p-4 pt-6 flex flex-col gap-4">
                 <div className="pl-2 pb-6 text-neutral-700 font-[i-m] text-2xl">{item && item.nom}</div>
 
-                <div className="flex w-full gap-8">
+                <div className="flex flex-col xl:flex-row w-full gap-8">
 
                     <div className="flex flex-col w-[400px]">
                         <img src="https://placehold.co/100" className="w-full rounded-sm" alt="" />
                     </div>
 
-                    <div className="flex flex-col min-w-[400px] min-h-full justify-between">
-
+                    <div className="flex flex-col min-w-[400px] min-h-full justify-baseline xl:justify-between">
 
                         <div className="flex flex-col">
 
@@ -115,6 +121,14 @@ const Products = () => {
                                     {item.prix} Ar/kg
                                 </div>
                             </div>
+                            <div className="flex items-center gap-12 pt-0 pb-2">
+                                <div className="pt-2 text-neutral-600">
+                                    stock
+                                </div>
+                                <div className="pt-2 text-xl">
+                                    {item.stock} Ar/kg
+                                </div>
+                            </div>
 
                             <div className="flex items-center gap-12 pt-4">
                                 <div className="pt-2 text-neutral-600">
@@ -127,7 +141,7 @@ const Products = () => {
 
                         </div>
 
-                        <div className="w-full flex justify-between pt-5">
+                        <div className="w-full flex flex-col xl:flex-row justify-baseline xl:justify-between pt-5">
                             <div className="p-2 text-2xl">
                                 {qtt_prix} Ar
                             </div>

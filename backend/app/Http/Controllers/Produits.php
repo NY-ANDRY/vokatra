@@ -15,8 +15,13 @@ class Produits extends Controller
         $result["items"] = V_produits::all();
 
         $keywords = request()->query("keywords");
+        $categorie_id = request()->query("categorie_id");
+
         if (!empty($keywords)) {
             $result["items"] = V_produits::filterByKeywords($keywords);
+        }
+        if (!empty($categorie_id)) {
+            $result["items"] = V_produits::where("categorie_id", "=", $categorie_id)->get();
         }
 
         return response()->json($result);

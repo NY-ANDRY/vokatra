@@ -5,10 +5,12 @@ import { host } from "../config";
 import { Table, Thead, Tbody, Trh, Tr, Th, Td, Button, Input, TextArea, Label, DatePick, Button_red } from "../components/Balise";
 import { useNavigate } from "react-router-dom";
 import Select from "react-select";
+import { usePanier } from "../contexts/PanierContext";
 
 const Commande = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const { setOpenPanier } = usePanier();
 
     const { data, loading, error } = useFetch(`${host}/commandes/${id}`);
     const { data: modes_paiement, loading_mode_p, error_mode_p } = useFetch(`${host}/modes_paiements`);
@@ -22,6 +24,9 @@ const Commande = () => {
     const [numero, setNumero] = useState('');
     const [nomClient, setNomClient] = useState('');
 
+    useEffect(() => {
+        setOpenPanier(false);
+    }, []);
     useEffect(() => {
         if (data.items) {
             setItem(data.items);
