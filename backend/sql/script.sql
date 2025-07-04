@@ -217,11 +217,18 @@ CREATE TABLE t_factures (
     FOREIGN KEY (commande_id) REFERENCES t_commandes(id)
 );
 
+CREATE TABLE t_paiements_mode (
+  	id SERIAL PRIMARY KEY,
+  	nom VARCHAR(30)
+);
+
 CREATE TABLE t_paiements (
     id SERIAL PRIMARY KEY,
     facture_id INT,
     date_paiement TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     montant DECIMAL(10,2),
+  	mode_id INT,
+  	FOREIGN KEY (mode_id) REFERENCES t_paiements_mode(id),
     FOREIGN KEY (facture_id) REFERENCES t_factures(id)
 );
 
@@ -241,7 +248,9 @@ INSERT INTO t_statuts_livraisons (id, nom) VALUES
 CREATE TABLE t_livraisons_lieux (
     id SERIAL PRIMARY KEY,
     nom VARCHAR(100),
-    adresse VARCHAR(255)
+    adresse VARCHAR(255),
+  	latitude DECIMAL(9,6),
+  	longitude DECIMAL(9,6)
 );
 
 CREATE TABLE t_livraisons_prix (
@@ -343,3 +352,60 @@ FROM t_commandes_produits AS cp
 JOIN t_produits AS prd ON cp.produit_id = prd.id
 JOIN t_categories AS ctg ON ctg.id = prd.categorie_id;
 
+CREATE OR REPLACE VIEW v_commandes AS
+SELECT 
+    c.*,
+    sc.nom as statut_nom,
+    COALESCE(prod.total_produits, 0) + COALESCE(pack.total_packs, 0) AS total
+FROM t_commandes c
+JOIN t_statuts_commandes sc ON c.statut_id = sc.id
+LEFT JOIN (
+    SELECT 
+        commande_id, 
+        SUM(cp.quantite * p.prix) AS total_produits
+    FROM t_commandes_produits cp
+    JOIN t_produits p ON cp.produit_id = p.id
+    GROUP BY commande_id
+) AS prod ON c.id = prod.commande_id
+LEFT JOIN (
+    SELECT 
+        commande_id, 
+        SUM(cp.quantite * pk.prix_total) AS total_packs
+    FROM t_commandes_packs cp
+    JOIN t_packs pk ON cp.pack_id = pk.id
+    GROUP BY commande_id
+) AS pack ON c.id = pack.commande_id;
+
+CREATE OR REPLACE VIEW v_factures AS
+SELECT 
+    f.id AS id,
+    f.date_facture,
+    f.montant_total,
+    f.nom_client,
+    f.utilisateur_id,
+    u.nom AS utilisateur_nom,
+    f.commande_id,
+    sc.nom AS statut_facture,
+    COALESCE(vc.total, 0) AS total_commande,
+    
+    -- Informations sur la livraison
+    l.id AS livraison_id,
+    l.date_livraison,
+    l.prix AS prix_livraison,
+    sl.nom AS statut_livraison,
+    
+    -- Lieu de livraison
+    ll.nom AS lieu_nom,
+    ll.adresse AS lieu_adresse,
+    ll.latitude,
+    ll.longitude
+
+FROM t_factures f
+LEFT JOIN t_utilisateurs u ON f.utilisateur_id = u.id
+JOIN t_statuts_factures sc ON f.statut_id = sc.id
+LEFT JOIN v_commandes vc ON f.commande_id = vc.id
+
+-- Jointure sur la livraison liée à la commande
+LEFT JOIN t_livraisons l ON f.commande_id = l.commande_id
+LEFT JOIN t_statuts_livraisons sl ON l.statut_id = sl.id
+LEFT JOIN t_livraisons_lieux ll ON l.lieu_livraison_id = ll.id;
