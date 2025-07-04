@@ -47,7 +47,7 @@ const Header = () => {
 
                     <div className="flex">
                         <div className="theme flex items-center cursor-pointer hover:bg-gray-200 rounded-sm p-2" onClick={() => { setOpenPanier(!openPanier) }} >
-                            <img src="./assets/svg/panier.svg" className="w-8" alt="" />
+                            <img src="/assets/svg/panier.svg" className="w-8" alt="" />
                         </div>
 
                         <div className="flex z-50">
@@ -86,7 +86,7 @@ const Header = () => {
 
                     <div className="flex pr-8">
                         <div className="theme flex items-center cursor-pointer hover:bg-gray-200 rounded-sm p-2" onClick={() => { setOpenPanier(!openPanier) }} >
-                            <img src="./assets/svg/panier.svg" className="w-8" alt="" />
+                            <img src="/assets/svg/panier.svg" className="w-8" alt="" />
                         </div>
 
                         <div className="flex z-50">

@@ -51,6 +51,8 @@ const Products = () => {
             setPrix(product.item.prix);
             setStock(product.item.stock);
             setStock_histo(product.stock_histo);
+            console.log(product.stock_histo);
+            
 
             setCategorie(product.item.categorie);
             setCategorieId(product.item.categorie_id);

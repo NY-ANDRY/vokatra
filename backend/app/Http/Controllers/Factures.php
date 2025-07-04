@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\T_commandes;
 use App\Models\T_factures;
+use App\Models\T_livraisons;
 use App\Models\T_stocks_produits;
 use App\Models\V_commandes;
 use App\Models\V_commandes_produits;
@@ -22,6 +23,7 @@ class Factures extends Controller
         $commande_id = request()->input("commande_id");
         $lieux_id = request()->input("lieux_id");
         $mode_paiement_id = request()->input("mode_paiement_id");
+        $date_heure_livraison = request()->input("date_heure_livraison");
         $numero = request()->input("numero");
         $nom = request()->input("nom");
         $user = request()->session()->get("user");
@@ -36,6 +38,12 @@ class Factures extends Controller
             $facture->utilisateur_id = $user;
         }
         $facture->save();
+        $livraison = new T_livraisons();
+        $livraison->commande_id = $commande_id;
+        $livraison->lieu_livraison_id = $lieux_id;
+        $livraison->date_livraison = $date_heure_livraison;
+        $livraison->save();
+
 
         T_stocks_produits::registerFacture($facture->id);
 

@@ -5,6 +5,7 @@ import { Table, Thead, Tbody, Trh, Tr, Th, Td, Input, Label, Button } from "../c
 import { useEffect, useState } from "react";
 import Select from "react-select";
 import { motion, AnimatePresence } from "framer-motion";
+import { fade } from "../components/animations/Index";
 
 const Products = () => {
     const navigate = useNavigate();
@@ -48,6 +49,7 @@ const Products = () => {
             }
         }
     }, [keywords]);
+
     useEffect(() => {
         if (categorieId != '') {
             filterByCategorie(categorieId);
@@ -96,7 +98,7 @@ const Products = () => {
 
             <div className="flex flex-col gap-4 w-full xl:w-72 pt-4 border-neutral-300 border-t-[1px]">
                 <div className="flex flex-col w-full gap-4">
-                    <Input onInput={(e) => { setKeywords(e.target.value) }} placeholder="Keyword" />
+                    <Input onInput={(e) => { setKeywords(e.target.value) }} placeholder="Keywords" />
                 </div>
 
                 <div className="flex flex-col w-full gap-2 px-0">
@@ -131,10 +133,7 @@ const Products = () => {
                         <motion.div
                             key={item.id}
                             layout
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.13 }}
+                            {...fade}
                             onClick={() => handleClick(item.id)}
                             className="flex flex-col w-full p-2 xl:p-0 xl:w-72 gap-0 cursor-pointer"
                         >
@@ -143,7 +142,7 @@ const Products = () => {
                                 <div className="text-[16px]">{item.nom}</div>
                                 <div className="text-[16px]">{item.prix} Ar/kg</div>
                             </div>
-                            <div className="flex text-neutral-500">
+                            <div className="flex justify-between text-neutral-500">
                                 <div className="text-[14px]">{item.categorie}</div>
                             </div>
                             <div className="w-full pt-2">
@@ -153,7 +152,6 @@ const Products = () => {
                     ))}
 
                 </AnimatePresence>
-
 
             </div>
 

@@ -17,6 +17,8 @@ import {
 import { CustomTooltip } from "../components/Tooltip/CustomToolTip";
 import { useNavigate } from "react-router-dom";
 import { usePanier } from "../contexts/PanierContext";
+import Popup from "../components/alert/Popup";
+import Alert from "../components/alert/Alert";
 
 const Products = () => {
     const { id } = useParams();
@@ -24,6 +26,8 @@ const Products = () => {
     const { setOpenPanier } = usePanier();
 
     const { data: product, loading: loading_product, error: error_product } = useFetch(`${host}/produits/${id}`);
+    const [error, setError] = useState('');
+    const [showError, setShowError] = useState(false);
     const [item, setItem] = useState([]);
 
     const [quantity, setQuantity] = useState(0);
@@ -80,6 +84,12 @@ const Products = () => {
             if (result.ok) {
                 setOpenPanier(true);
                 navigate("/products");
+            } else if (result.message) {
+                setError(result.message);
+                setShowError(true);
+                setTimeout(() => {
+                    setShowError(false);
+                }, 2000);
             }
         } catch (err) {
             console.log(err.message);
@@ -91,6 +101,8 @@ const Products = () => {
 
     return (
         <div className="flex w-full justify-center">
+            
+            <Alert show={showError}>{error}</Alert>
 
             <div className="w-[1100px] p-4 pt-6 flex flex-col gap-4">
                 <div className="pl-2 pb-6 text-neutral-700 font-[i-m] text-2xl">{item && item.nom}</div>

@@ -31,41 +31,41 @@ const Products = () => {
     }, [data]);
 
 
-const exportPDF = () => {
-    const doc = new jsPDF();
+    const exportPDF = () => {
+        const doc = new jsPDF();
 
-    doc.setFontSize(18);
-    doc.text("Facture VOKATRA", 14, 22);
+        doc.setFontSize(18);
+        doc.text("Facture VOKATRA", 14, 22);
 
-    doc.setFontSize(12);
-    doc.text(`Client : ${data?.facture?.nom_client || ""}`, 14, 32);
-    doc.text(`Facture N° : ${data?.facture?.id || ""}`, 14, 40);
+        doc.setFontSize(12);
+        doc.text(`Client : ${data?.facture?.nom_client || ""}`, 14, 32);
+        doc.text(`Facture N° : ${data?.facture?.id || ""}`, 14, 40);
 
-    const headers = [["Produit", "Prix (Ar)", "Quantité (kg)", "Total (Ar)"]];
-    const rows = items.map(item => [
-        item.produit_nom,
-        item.produit_prix.toString(),
-        item.quantite.toString(),
-        item.total.toString(),
-    ]);
+        const headers = [["Produit", "Prix (Ar)", "Quantité (kg)", "Total (Ar)"]];
+        const rows = items.map(item => [
+            item.produit_nom,
+            item.produit_prix.toString(),
+            item.quantite.toString(),
+            item.total.toString(),
+        ]);
 
-    autoTable(doc, {
-        startY: 50,
-        head: headers,
-        body: rows,
-        styles: { fontSize: 12 },
-        headStyles: { fillColor: [22, 160, 133] },
-        margin: { left: 14, right: 14 },
-    });
+        autoTable(doc, {
+            startY: 50,
+            head: headers,
+            body: rows,
+            styles: { fontSize: 12 },
+            headStyles: { fillColor: [22, 160, 133] },
+            margin: { left: 14, right: 14 },
+        });
 
-    const finalY = doc.lastAutoTable.finalY || 50;
+        const finalY = doc.lastAutoTable.finalY || 50;
 
-    doc.setFontSize(14);
-    doc.text(`Total payé : ${data?.facture?.montant_total || ""} Ar`, 14, finalY + 10);
-    doc.text(`État : ${data?.facture?.statut_facture || ""}`, 14, finalY + 20);
+        doc.setFontSize(14);
+        doc.text(`Total payé : ${data?.facture?.montant_total || ""} Ar`, 14, finalY + 10);
+        doc.text(`État : ${data?.facture?.statut_facture || ""}`, 14, finalY + 20);
 
-    doc.save(`facture_${data?.facture?.id || "export"}.pdf`);
-};
+        doc.save(`facture_${data?.facture?.id || "export"}.pdf`);
+    };
 
 
 
@@ -134,12 +134,41 @@ const exportPDF = () => {
                             </div>
                         </div>
 
-                        <div className="flex flex-row-reverse pt-2">
-                            <Button onClick={exportPDF}>exporter en PDF</Button>
-                        </div>
                     </div>
                 </div>
 
+                {data.facture &&
+                    <div className="flex flex-col gap-0 justify-between pt-2 pb-2">
+                        <div className="p-2 pb-0 text-xl font-[i-m]">
+                            LIVRAISON
+                        </div>
+                        <div className="flex flex-col gap-1 p-2 pt-3 pb-1">
+                            <div className="flex gap-3 relative">
+                                <div className="flex items-center text-gray-500 relative top-[2px]">
+                                    heure:
+                                </div>
+                                <div className="flex text-xl text-gray-900">
+                                    {data.facture && data.facture.date_livraison}
+                                </div>
+                            </div>
+                        </div>
+                        <div className="flex flex-col gap-1 p-2 pt-0">
+                            <div className="flex gap-3 relative">
+                                <div className="flex items-center text-gray-500 relative top-[2px]">
+                                    lieux:
+                                </div>
+                                <div className="flex text-xl text-gray-900">
+                                    {data.facture && data.facture.lieu_nom}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+
+                <div className="flex flex-row-reverse text-xl pt-2 h-12">
+                    <Button onClick={exportPDF}>exporter en PDF</Button>
+                </div>
             </div>
         </div>
 

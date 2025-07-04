@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\T_panier_produits;
 use App\Models\T_paniers;
 use App\Models\V_paniers_produits;
+use App\Models\V_produits;
 use Illuminate\Http\Request;
 
 class Paniers extends Controller
@@ -12,11 +13,24 @@ class Paniers extends Controller
     function store()
     {
         $result = [
-            "ok" => true
+            "ok" => true,
+            "message" => ""
         ];
 
         $product_id = request()->input("produit_id");
         $quantity = request()->input("quantity");
+        if ($quantity <= 0) {
+            $result["ok"] = false;
+            $result["message"] = "quantite requis";
+            return response()->json($result);
+        }
+
+        $qtt_reste = V_produits::where("id", "=", $product_id)->first()->stock;
+        if ($qtt_reste < $quantity) {
+            $result["ok"] = false;
+            $result["message"] = "stock insuffisant";
+            return response()->json($result);
+        }
 
         $panier_id = request()->session()->get("panier");
         $panier = T_paniers::find($panier_id);
@@ -39,7 +53,12 @@ class Paniers extends Controller
             $new_product->save();
         } else {
             $cur_item->quantite += $quantity;
-            $cur_item->save();
+            if ($qtt_reste < $cur_item->quantite) {
+                $result["ok"] = false;
+                $result["message"] = "stock insuffisant";
+                return response()->json($result);
+            }
+            $cur_item->update();
         }
 
         request()->session()->put("panier", $panier_id);

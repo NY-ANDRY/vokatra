@@ -17,6 +17,7 @@ class V_produit_quotidienne extends Model
         $endDate = Carbon::parse($defaultFin);
 
         $produit = V_produits::find($id_produit);
+        $stock_initial = $produit->stock;
         $stock = $produit->stock;
 
         $fetchedData = self::where('id_produit', "=", $id_produit)
@@ -40,6 +41,7 @@ class V_produit_quotidienne extends Model
                 'stock' => $stock,
             ];
         }
+        $result[0]["stock"] = $stock_initial;
 
         return collect($result)->reverse()->values();
     }

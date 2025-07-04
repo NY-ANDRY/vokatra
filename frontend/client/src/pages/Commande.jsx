@@ -1,11 +1,25 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import { data, useParams } from "react-router-dom";
 import { useFetch } from "../hooks/useFetch";
 import { host } from "../config";
-import { Table, Thead, Tbody, Trh, Tr, Th, Td, Button, Input, TextArea, Label, DatePick, Button_red } from "../components/Balise";
+import { Table, Thead, Tbody, Trh, Tr, Th, Td, Button, Input, TextArea, Label, DateTimePick, Button_red } from "../components/Balise";
 import { useNavigate } from "react-router-dom";
 import Select from "react-select";
 import { usePanier } from "../contexts/PanierContext";
+
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
+// Corriger l'icône par défaut dans React
+import icon from 'leaflet/dist/images/marker-icon.png';
+import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+let DefaultIcon = L.icon({ iconUrl: icon, shadowUrl: iconShadow });
+L.Marker.prototype.options.icon = DefaultIcon;
+const points = [
+    { lat: -18.8792, lng: 47.5079, label: "Point A" },
+    { lat: -18.8850, lng: 47.5100, label: "Point B" },
+];
+
 
 const Commande = () => {
     const { id } = useParams();
@@ -18,11 +32,15 @@ const Commande = () => {
     const [items, setItem] = useState([]);
     const [total, setTotal] = useState(0);
 
+    const [date_heure_livraison, setDate_heure_livraison] = useState('');
     const [lieux_id, setLieux_id] = useState('');
     const [mode_p_id, setMode_p_id] = useState('');
     const [mode_p_label, setMode_p_label] = useState('');
     const [numero, setNumero] = useState('');
     const [nomClient, setNomClient] = useState('');
+
+    const [selectedLieux, setSelectedLieux] = useState(null);
+
 
     useEffect(() => {
         setOpenPanier(false);
@@ -37,15 +55,27 @@ const Commande = () => {
     }, [data]);
 
     const handleChangeLieux = (option) => {
-        // console.log(option);
         setLieux_id(option.value);
-    }
+        const selected = lieux.find(l => l.value === option.value);
+        setSelectedLieux(selected);
+    };
+
 
     const handleChangeMode_p = (option) => {
-        // console.log(option);
         setMode_p_id(option.value);
         setMode_p_label(option.label);
     }
+
+    const ZoomOnSelect = ({ selected }) => {
+        const map = useMap();
+        useEffect(() => {
+            if (selected) {
+                map.setView([selected.latitude, selected.longitude], 16); // Zoom level 16
+            }
+        }, [selected]);
+        return null;
+    };
+
 
     const handleSubmit = async () => {
         console.log("ok");
@@ -58,6 +88,7 @@ const Commande = () => {
             mode_paiement_id: mode_p_id,
             numero: numero,
             nom: nomClient,
+            date_heure_livraison: date_heure_livraison
         };
 
         try {
@@ -87,7 +118,7 @@ const Commande = () => {
 
     return (
         <div className="flex w-full p-4 gap-20 justify-center">
-            <div className="w-[900px]">
+            <div className="w-[700px]">
 
                 <div className="pt-2 pb-4 text-xl">
                     commande numero: {data.commande && data.commande.id}
@@ -127,10 +158,9 @@ const Commande = () => {
 
             </div>
 
-
             {data.commande && data.commande.statut_id != 3 &&
 
-                <div className="flex flex-col pt-2 pb-4 w-[300px] gap-4">
+                <div className="flex flex-col pt-2 pb-4 w-[700px] gap-4">
                     <div className="flex flex-row-reverse text-xl">
                         {total} Ar
                     </div>
@@ -144,7 +174,7 @@ const Commande = () => {
                         </div>
                     </div>
 
-                    <div className="pt-0">
+                    <div className="pt-0 z-30">
                         <div className="text-gray-600">
                             mode de paiement
                         </div>
@@ -166,13 +196,44 @@ const Commande = () => {
 
                     }
 
-                    <div className="pt-0">
-                        <div className="text-gray-600">
-                            lieux livraison
+                    <div className="flex flex-col gap-1">
+                        <div className="flex text-xl font-[i-b]">
+                            Livraison
                         </div>
-                        <div className="pt-2">
-                            <Select options={lieux} onChange={handleChangeLieux} />
+                        <div className="flex w-full gap-4 z-20 pb-1">
+                            <div className="flex flex-1 justify-center flex-col">
+                                <div className="text-gray-600">
+                                    date heure
+                                </div>
+                                <div className="pt-2">
+                                    <DateTimePick selected={date_heure_livraison} onChange={(date) => setDate_heure_livraison(date)} />
+                                </div>
+                            </div>
+                            <div className="flex flex-1 justify-center flex-col">
+                                <div className="text-gray-600">
+                                    lieux
+                                </div>
+                                <div className="pt-2">
+                                    <Select options={lieux} onChange={handleChangeLieux} />
+                                </div>
+                            </div>
                         </div>
+                    </div>
+
+                    <div className="pt-0 z-10">
+                        <MapContainer center={[-18.8792, 47.5079]} zoom={13} style={{ height: '500px', width: '100%' }}>
+                            <TileLayer
+                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                attribution='© OpenStreetMap contributors'
+                            />
+                            {lieux && lieux.map((point, index) => (
+                                <Marker position={[point.latitude, point.longitude]} key={index}>
+                                    <Popup>{point.label}</Popup>
+                                </Marker>
+                            ))}
+                            <ZoomOnSelect selected={selectedLieux} />
+                        </MapContainer>
+
                     </div>
 
                     <div className="flex flex-row-reverse pt-2">

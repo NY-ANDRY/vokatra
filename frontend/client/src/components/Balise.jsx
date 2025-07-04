@@ -22,6 +22,26 @@ export const DatePick = ({ otherClass, ...rest }) => {
     )
 }
 
+export const DateTimePick = ({ otherClass, ...rest }) => {
+    return (
+        <DatePicker
+            className={
+                'bg-neutral-50 w-full h-8 px-0 pl-4 pr-4 rounded-sm border-neutral-300 text-neutral-800 text-sm focus:outline-0 border-[1px] transition-all hover:border-blue-500 focus:border-blue-600 ' +
+                `${otherClass}`
+            }
+            dateFormat="yyyy-MM-dd HH:mm"
+            showTimeSelect
+            timeFormat="HH:mm"
+            timeIntervals={15}
+            timeCaption="Heure"
+            isClearable
+            showYearDropdown
+            scrollableMonthYearDropdown
+            {...rest}
+        />
+    );
+};
+
 export const Label = ({ children, otherClass, ...rest }) => {
     return <label className={'text-neutral-500 font-[i] text-sm whitespace-nowrap' + ` ${otherClass}`} {...rest}> {children} </label>
 }

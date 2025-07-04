@@ -12,6 +12,8 @@ class Livraisons_lieux extends Controller
             return [
                 "value" => $item->id,
                 "label" => $item->nom,
+                "latitude" => $item->latitude,
+                "longitude" => $item->longitude
             ];
         });
 

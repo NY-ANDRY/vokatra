@@ -12,7 +12,9 @@ const SideBar = () => {
     ]
 
     const views = [
-        { label: 'test', link: '/test' },
+        { label: 'commandes', link: '/commande' },
+        { label: 'factures', link: '/factures' },
+        { label: 'livraisons', link: '/livraisons' },
     ]
 
     const handleClick = () => {
