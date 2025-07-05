@@ -66,7 +66,7 @@ class Paniers extends Controller
         return response()->json($result);
     }
 
-    function get()
+    function show()
     {
         $result = [
             "panier" => null,

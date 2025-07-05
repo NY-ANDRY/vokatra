@@ -24,17 +24,20 @@ Route::prefix('/api')->group(function () {
     Route::get('/test', [Test::class, 'index']);
     
     Route::get('/produits', [Produits::class, 'index']);
-    Route::get('/produits/{id}', [Produits::class, 'one']);
+    Route::get('/produits/{id}', [Produits::class, 'show']);
+    Route::post('/produits', [Produits::class, 'store']);
+    Route::put('/produits', [Produits::class, 'edit']);
+    Route::delete('/produits', [Produits::class, 'destroy']);
 
     Route::post('/stocks/produits', [Stock::class, 'store']);
 
     Route::post('/paniers', [Paniers::class, 'store']);
-    Route::get('/paniers', [Paniers::class, 'get']);
+    Route::get('/paniers', [Paniers::class, 'show']);
     Route::delete('/paniers', [Paniers::class, 'delete']);
 
     Route::delete('/paniers_products', [Paniers_products::class, 'delete']);
 
-    Route::get('/commandes', [Commandes::class, 'all']);
+    Route::get('/commandes', [Commandes::class, 'index']);
     Route::post('/commandes', [Commandes::class, 'store']);
     Route::get('/commandes/{id}', [Commandes::class, 'get']);
 

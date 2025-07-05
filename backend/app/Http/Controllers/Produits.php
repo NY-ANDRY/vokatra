@@ -8,7 +8,8 @@ use Illuminate\Http\Request;
 
 class Produits extends Controller
 {
-    function index() {
+    function index()
+    {
         $result = [
             "items" => []
         ];
@@ -27,7 +28,8 @@ class Produits extends Controller
         return response()->json($result);
     }
 
-    function one($id){
+    function show($id)
+    {
 
         $result = [
             "items" => [],
@@ -36,7 +38,19 @@ class Produits extends Controller
         $result["item"] = V_produits::find($id);
         $result["stock_histo"] = V_produit_quotidienne::getHisto($id);
 
-        return $result;
+        return response()->json($result);
     }
 
+    function store()
+    {
+        return response()->json([]);
+    }
+    function edit()
+    {
+        return response()->json([]);
+    }
+    function destroy()
+    {
+        return response()->json([]);
+    }
 }

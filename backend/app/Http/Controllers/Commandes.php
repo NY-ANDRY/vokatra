@@ -9,6 +9,22 @@ use Illuminate\Http\Request;
 
 class Commandes extends Controller
 {
+
+    function index()
+    {
+        $result = [
+            'ok' => true,
+            'items' => null
+        ];
+
+        $id = request()->session()->get("commande");
+        $items = V_commandes::where("id", "=", $id)->get();
+
+        $result["items"] = $items;
+
+        return response()->json($result);
+    }
+    
     function store()
     {
         $result = [
@@ -55,19 +71,4 @@ class Commandes extends Controller
 
         return response()->json($result);
     }
-
-    function all() {
-        $result = [
-            'ok' => true,
-            'items' => null
-        ];
-        
-        $id =request()->session()->get("commande");
-        $items = V_commandes::where("id", "=", $id)->get();
-
-        $result["items"] = $items;
-
-        return response()->json($result);
-    }
-    
 }
