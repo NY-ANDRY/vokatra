@@ -24,7 +24,7 @@ const SideBar = () => {
 
     return (
         <div className="w-64 flex flex-col">
-            <div className="h-12 text-neutral-900 border-zinc-300 flex font-[i-b] text-xl items-center px-6 border-b-[0.5px] cursor-pointer" onClick={handleClick}>VOKATRA</div>
+            <div className="h-12 text-neutral-900 border-zinc-300 flex font-[i-b] text-xl items-center px-6 border-b-[0.5px] cursor-pointer" onClick={handleClick}>ADMIN</div>
             <div className="border-zinc-300 flex flex-col gap-2 justify-center pb-5 pr-5 pt-4 pl-5 border-b-[0.5px]">
                 <div className="text-neutral-400 p-2 font-[i]">Dashboard</div>
                 <div className="flex flex-col text-[#00000099] text-sm gap-1 font-[i-m]">

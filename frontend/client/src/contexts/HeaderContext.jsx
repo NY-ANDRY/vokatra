@@ -3,7 +3,7 @@ import { createContext, useContext, useState } from "react";
 const HeaderContext = createContext();
 
 const HeaderProvider = ({ children }) => {
-    const [headerTitle, setHeaderTitle] = useState("VOKATRA");
+    const [headerTitle, setHeaderTitle] = useState("FARMENA");
 
     return (
         <HeaderContext.Provider value={{ headerTitle, setHeaderTitle }}>

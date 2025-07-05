@@ -37,13 +37,13 @@ const Header = () => {
                         </Link>
                     </div>
 
-                    <div className="flex">
+                    {/* <div className="flex">
                         <div className="theme flex items-center cursor-pointer" >
                             <Link to={"/panier"} className="px-2 cursor-pointer">
                                 panier
                             </Link>
                         </div>
-                    </div>
+                    </div> */}
 
                     <div className="flex">
                         <div className="theme flex items-center cursor-pointer hover:bg-gray-200 rounded-sm p-2" onClick={() => { setOpenPanier(!openPanier) }} >
@@ -62,7 +62,7 @@ const Header = () => {
 
                 <div className="flex flex-1 w-full justify-between xl:flex-1">
 
-                    <div className="flex-1 text-gray-500 flex items-center justify-center gap-2">
+                    <div className="flex-1 text-gray-500 flex items-center pl-4 gap-2">
                         <div className="p-0">
 
                             <Link to={"/commandes"} className="px-2 cursor-pointer">
@@ -76,12 +76,12 @@ const Header = () => {
                             </Link>
                         </div>
 
-                        <div className="p-0">
+                        {/* <div className="p-0">
 
                             <Link to={"/panier"} className="px-2 cursor-pointer">
                                 panier
                             </Link>
-                        </div>
+                        </div> */}
                     </div>
 
                     <div className="flex pr-8">
