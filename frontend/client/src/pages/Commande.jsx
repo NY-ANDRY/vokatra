@@ -161,8 +161,8 @@ const Commande = () => {
             {data.commande && data.commande.statut_id != 3 &&
 
                 <div className="flex flex-col pt-2 pb-4 w-[700px] gap-4">
-                    <div className="flex flex-row-reverse text-xl">
-                        {total} Ar
+                    <div className="flex flex-row text-xl font-[i-b]">
+                        - {total} Ar
                     </div>
 
                     <div className="pt-0">
