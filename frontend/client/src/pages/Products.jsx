@@ -211,7 +211,7 @@ const Products = () => {
                         />
                     </div>
                 </div>
-                <div className="flex flex-col w-full gap-0 px-0 z-20">
+                <div className="flex flex-col w-full gap-0 px-0 z-10">
                     <div className="flex justify-between text-neutral-600">
                         <div className="p-0">
                             prix / kg
