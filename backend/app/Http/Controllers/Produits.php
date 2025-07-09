@@ -36,7 +36,7 @@ class Produits extends Controller
                 ->toArray();
             $result["items"] = V_produits::whereIn('id', $produits_ids)->get();
         }
-        if (!empty($min) && !empty($max)) {
+        if (is_numeric($min) && is_numeric($max)) {
             $min = doubleval($min);
             $max = doubleval($max);
             $result["items"] = V_produits::whereBetween("prix", [$min, $max])->get();
