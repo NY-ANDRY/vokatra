@@ -5,7 +5,7 @@ const Home = () => {
     setHeaderTitle('VOKATRA');
 
     return (
-        <section id="home">
+        <section id="home" className="max-h-full overflow-auto">
             home
         </section>
     )

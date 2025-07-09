@@ -102,7 +102,7 @@ const Products = () => {
     }
 
     return (
-        <div className="flex w-full justify-center">
+        <div className="flex w-full justify-center max-h-full overflow-auto">
             <div className="w-[1100px]">
 
                 <div className="pt-2 pb-4 text-xl">

@@ -22,7 +22,7 @@ const Products = () => {
     }
 
     return (
-        <div className="flex flex-col items-center p-8 gap-12">
+        <div className="flex flex-col items-center max-h-full overflow-auto  p-8 gap-12">
             <div className="w-[1100px]">
                 <div className="text-xl pb-4">Commandes</div>
 

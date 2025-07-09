@@ -100,7 +100,7 @@ const Products = () => {
     }
 
     return (
-        <div className="flex w-full justify-center">
+        <div className="flex w-full justify-center max-h-full overflow-auto">
             
             <Alert show={showError}>{error}</Alert>
 

@@ -117,7 +117,7 @@ const Commande = () => {
     }
 
     return (
-        <div className="flex w-full p-4 gap-20 justify-center">
+        <div className="flex w-full p-4 gap-20 max-h-full overflow-auto justify-center">
             <div className="w-[700px]">
 
                 <div className="pt-2 pb-4 text-xl">

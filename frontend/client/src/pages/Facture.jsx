@@ -70,7 +70,7 @@ const Products = () => {
 
 
     return (
-        <div className="flex w-full justify-center p-4 gap-20">
+        <div className="flex w-full justify-center max-h-full overflow-auto p-4 gap-20">
             <div className="w-[900px]">
 
                 <div className="pt-2 pb-4 text-xl flex justify-between">
