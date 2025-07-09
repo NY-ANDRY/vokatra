@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { Input } from "../Balise";
 import { host } from "../../config";
 import Select from "react-select";
 import { useFetch } from "../../hooks/useFetch";
@@ -7,9 +6,8 @@ import { useFetch } from "../../hooks/useFetch";
 const Filtre_saisons = ({ setItems, handleReset }) => {
 
     const { data: saisons, loading: loading_saisons, error: error_saisons } = useFetch(`${host}/saisons`);
-
     const [item_saisons, setItem_saisons] = useState([]);
-    const [saisonsId, setSaisonsId] = useState('-');
+    const [saisonsId, setSaisonsId] = useState([]);
 
     useEffect(() => {
         if (saisons.items) {
@@ -18,8 +16,9 @@ const Filtre_saisons = ({ setItems, handleReset }) => {
     }, [saisons]);
 
     useEffect(() => {
-        if (saisonsId != '') {
-            filterBySaisons(saisonsId);
+        if (saisonsId.length > 0) {
+            const ids = saisonsId.map(option => option.value).join('-');
+            filterBySaisons(ids);
         } else {
             handleReset();
         }
@@ -36,23 +35,19 @@ const Filtre_saisons = ({ setItems, handleReset }) => {
                 setItems(data.items);
             }
         } catch (err) {
-            setError(err.message);
-        } finally {
-            setLoading(false);
+            console.error("Erreur filtrage saisons:", err.message);
         }
     }
 
     const reset = () => {
-        setSaisonsId('');
+        setSaisonsId([]);
         handleReset();
     }
 
     return (
         <>
             <div className="flex justify-between text-neutral-600">
-                <div className="p-0">
-                    saisons
-                </div>
+                <div className="p-0">saisons</div>
                 <div className="p-px cursor-pointer transition-all hover:bg-gray-200 active:bg-gray-400 rounded-sm" onClick={reset}>
                     <img src="./assets/svg/reset.svg" className="w-5" alt="" />
                 </div>
@@ -61,16 +56,15 @@ const Filtre_saisons = ({ setItems, handleReset }) => {
                 <Select
                     isMulti
                     options={item_saisons}
-                    value={item_saisons.filter(cat => saisonsId.includes(cat.value))}
+                    value={saisonsId}
                     onChange={(selectedOptions) => {
-                        const ids = selectedOptions.map(option => option.value).join('-');
-                        setSaisonsId(ids);
+                        setSaisonsId(selectedOptions || []);
                     }}
                     className="w-full z-0"
                 />
             </div>
         </>
-    )
+    );
 }
 
 export default Filtre_saisons;

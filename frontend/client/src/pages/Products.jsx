@@ -5,10 +5,10 @@ import { Button } from "../components/Balise";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { fade } from "../components/animations/Index";
-import Filtre_keywords from "../components/filter/FIltre_keywords";
-import Filtre_prix from "../components/filter/FIltre_prix";
-import Filtre_saisons from "../components/filter/FIltre_saisons";
-import Filtre_categories from "../components/filter/FIltre_categories";
+import Filtre_keywords from "../components/filtre/FIltre_keywords";
+import Filtre_prix from "../components/filtre/FIltre_prix";
+import Filtre_saisons from "../components/filtre/FIltre_saisons";
+import Filtre_categories from "../components/filtre/FIltre_categories";
 
 const Products = () => {
     const navigate = useNavigate();
