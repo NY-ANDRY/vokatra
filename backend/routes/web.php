@@ -6,6 +6,7 @@ use App\Http\Controllers\Commandes;
 use App\Http\Controllers\Factures;
 use App\Http\Controllers\Home;
 use App\Http\Controllers\Livraisons_lieux;
+use App\Http\Controllers\Packs;
 use App\Http\Controllers\Paiements_mode;
 use App\Http\Controllers\Paniers;
 use App\Http\Controllers\Paniers_products;
@@ -20,11 +21,15 @@ Route::get('/', [Home::class, 'index']);
 Route::prefix('/api')->group(function () {
     Route::get('/dashboard/activites', [Activites::class, 'index']);
     Route::get('/dashboard/categories', [Categories::class, 'index']);
+    Route::get('/dashboard/stock', [Activites::class, 'stock']);
 
     Route::get('/categories', [Categories::class, 'index']);
     Route::get('/saisons', [Saisons::class, 'index']);
     Route::get('/test', [Test::class, 'index']);
     
+    Route::get('/packs', [Packs::class, 'index']);
+    Route::get('/packs/{id}', [Packs::class, 'show']);
+
     Route::get('/produits', [Produits::class, 'index']);
     Route::get('/produits/{id}', [Produits::class, 'show']);
     Route::post('/produits', [Produits::class, 'store']);

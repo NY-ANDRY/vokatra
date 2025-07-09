@@ -8,7 +8,8 @@ const SideBar = () => {
 
     const dashboard = [
         { label: 'Activity', link: '/dashboard/' },
-        { label: 'Products', link: '/products' }
+        { label: 'Products', link: '/products' },
+        { label: 'Stock', link: '/stock' }
     ]
 
     const views = [
