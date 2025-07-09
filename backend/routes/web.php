@@ -10,6 +10,7 @@ use App\Http\Controllers\Paiements_mode;
 use App\Http\Controllers\Paniers;
 use App\Http\Controllers\Paniers_products;
 use App\Http\Controllers\Produits;
+use App\Http\Controllers\Saisons;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Stock;
 use App\Http\Controllers\Test;
@@ -21,6 +22,7 @@ Route::prefix('/api')->group(function () {
     Route::get('/dashboard/categories', [Categories::class, 'index']);
 
     Route::get('/categories', [Categories::class, 'index']);
+    Route::get('/saisons', [Saisons::class, 'index']);
     Route::get('/test', [Test::class, 'index']);
     
     Route::get('/produits', [Produits::class, 'index']);

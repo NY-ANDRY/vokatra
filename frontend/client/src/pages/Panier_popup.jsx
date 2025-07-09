@@ -8,7 +8,7 @@ const Panier_popup = () => {
 
     return (
         <>
-            <AnimatePresence mode="popLayout">
+            <AnimatePresence mode="wait">
                 {openPanier &&
 
                     <motion.div

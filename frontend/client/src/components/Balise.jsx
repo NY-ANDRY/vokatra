@@ -2,17 +2,17 @@ import { motion, AnimatePresence } from "framer-motion"
 import DatePicker from "react-datepicker"
 
 export const Input = ({ otherClass, ...rest }) => {
-    return <input className={'bg-neutral-50 w-full h-8 px-0 pl-4 pr-4 rounded-sm border-neutral-300 text-neutral-800 text-sm focus:outline-0 border-[1px] transition-all hover:border-blue-500 focus:border-blue-600' + ` ${otherClass}`} {...rest} />
+    return <input className={'bg-neutral-50 w-full h-8 px-0 pl-4 pr-4 rounded-sm border-neutral-300 text-neutral-800 text-sm focus:outline-0 border-[1px] transition-all hover:border-green-500 focus:border-green-600' + ` ${otherClass}`} {...rest} />
 }
 
 export const TextArea = ({ otherClass, ...rest }) => {
-    return <textarea rows="4" className={'py-2 bg-neutral-50 w-full px-0 pl-4 pr-4 rounded-sm border-neutral-300 text-neutral-800 text-sm focus:outline-0 border-[1px] transition-all hover:border-blue-500 focus:border-blue-600 ' + ` ${otherClass}`} {...rest} />
+    return <textarea rows="4" className={'py-2 bg-neutral-50 w-full px-0 pl-4 pr-4 rounded-sm border-neutral-300 text-neutral-800 text-sm focus:outline-0 border-[1px] transition-all hover:border-green-500 focus:border-green-600 ' + ` ${otherClass}`} {...rest} />
 }
 
 export const DatePick = ({ otherClass, ...rest }) => {
     return (
         <DatePicker
-            className={'bg-neutral-50 w-full h-8 px-0 pl-4 pr-4 rounded-sm border-neutral-300 text-neutral-800 text-sm focus:outline-0 border-[1px] transition-all hover:border-blue-500 focus:border-blue-600 '  + ` ${otherClass}`}
+            className={'bg-neutral-50 w-full h-8 px-0 pl-4 pr-4 rounded-sm border-neutral-300 text-neutral-800 text-sm focus:outline-0 border-[1px] transition-all hover:border-green-500 focus:border-green-600 '  + ` ${otherClass}`}
             dateFormat="yyyy-MM-dd"
             isClearable
             showYearDropdown
@@ -26,7 +26,7 @@ export const DateTimePick = ({ otherClass, ...rest }) => {
     return (
         <DatePicker
             className={
-                'bg-neutral-50 w-full h-8 px-0 pl-4 pr-4 rounded-sm border-neutral-300 text-neutral-800 text-sm focus:outline-0 border-[1px] transition-all hover:border-blue-500 focus:border-blue-600 ' +
+                'bg-neutral-50 w-full h-8 px-0 pl-4 pr-4 rounded-sm border-neutral-300 text-neutral-800 text-sm focus:outline-0 border-[1px] transition-all hover:border-green-500 focus:border-green-600 ' +
                 `${otherClass}`
             }
             dateFormat="yyyy-MM-dd HH:mm"
@@ -47,7 +47,7 @@ export const Label = ({ children, otherClass, ...rest }) => {
 }
 
 export const Button = ({ children, otherClass, ...rest }) => {
-    return <button className={'px-3 py-0.5 rounded-sm bg-blue-300 border-blue-400 transition-all hover:bg-blue-400 active:bg-blue-500 border-[1px] cursor-pointer' + ` ${otherClass}`} {...rest}> {children} </button>
+    return <button className={'px-3 py-0.5 text-white rounded-sm font-[i-m] bg-green-500 border-green-400 transition-all hover:bg-green-600 active:bg-green-700 border-[1px] cursor-pointer' + ` ${otherClass}`} {...rest}> {children} </button>
 }
 
 export const Button_red = ({ children, otherClass, ...rest }) => {
@@ -96,7 +96,7 @@ export const Tr = ({ children, delay, ...rest }) => {
             // initial={{ opacity: 0, y: 10 }}
             // animate={{ opacity: 1, y: 0 }}
             // transition={{ duration: 0.3, delay: delay * 0.05 }}
-            className="cursor-pointer font-light text-left transition-normal bg-transparent transition-all hover:bg-blue-200 active:bg-blue-300 "
+            className="cursor-pointer font-light text-left transition-normal bg-transparent transition-all hover:bg-green-200 active:bg-green-400 "
             {...rest}
         >
             {children}

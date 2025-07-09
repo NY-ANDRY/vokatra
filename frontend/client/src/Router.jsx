@@ -10,7 +10,7 @@ import Facture from './pages/Facture';
 import Factures from './pages/Factures';
 
 const AppRoutes = [
-    { path: '/', element: <Products /> },
+    { path: '/', element: <Home /> },
     { path: '/home', redirect: "/" },
     { path: '/dashboard', element: <Activity /> },
     { path: '/products', element: <Products /> },
