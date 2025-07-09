@@ -52,7 +52,7 @@ const Products = () => {
             setStock(product.item.stock);
             setStock_histo(product.stock_histo);
             console.log(product.stock_histo);
-            
+
 
             setCategorie(product.item.categorie);
             setCategorieId(product.item.categorie_id);
@@ -96,11 +96,45 @@ const Products = () => {
             if (result.stock_histo) {
                 setStock_histo(result.stock_histo);
             }
+            if (result.item) {
+                setStock(result.item.stock);
+            }
         } catch (err) {
             console.log(err.message);
         } finally {
             console.log("finally");
 
+        }
+    }
+
+    const handleClick3 = async () => {
+        console.log('s');
+
+
+        const url_refresh = `${host}/produits/${id}`
+
+        try {
+            const response = await fetch(url_refresh,
+                {
+                    method: "GET",
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            const result = await response.json();
+            if (result.stock_histo) {
+                setStock_histo(result.stock_histo);
+            }
+            if (result.item) {
+                setStock(result.item.stock);
+            }
+        } catch (err) {
+            console.log(err.message);
+        } finally {
         }
     }
 
@@ -166,7 +200,14 @@ const Products = () => {
                 </div>
 
                 <div className="flex flex-col w-full">
-                    <div className="pl-8 pb-10 text-neutral-700 font-[i-m] text-2xl">Stock: {stock && stock} kg</div>
+                    <div className="flex justify-between pl-8 pb-10 text-neutral-700 font-[i-m] text-2xl">
+                        <div className="p-0">
+                            Stock: {stock && stock} kg
+                        </div>
+                        <button className="p-0 cursor-pointer" onClick={handleClick3}>
+                            <img src="/assets/svg/reset.svg" alt="" />
+                        </button>
+                    </div>
 
                     <div className="pl-2 flex-1">
                         <ResponsiveContainer width="100%" height="100%">

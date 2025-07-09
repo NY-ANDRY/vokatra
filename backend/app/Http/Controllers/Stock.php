@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\T_stocks_produits;
 use App\Models\V_produit_quotidienne;
+use App\Models\V_produits;
 use Illuminate\Http\Request;
 
 class Stock extends Controller
@@ -23,6 +24,7 @@ class Stock extends Controller
         $sp->save();
 
         $result["stock_histo"] = V_produit_quotidienne::getHisto($produit_id);
+        $result["item"] = V_produits::find($produit_id);
 
         return response()->json($result);
     }
