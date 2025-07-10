@@ -69,7 +69,11 @@ const Products = () => {
                             onClick={() => handleClick(item.id)}
                             className="flex flex-col w-full p-2 xl:p-0 xl:w-72 gap-0 cursor-pointer"
                         >
-                            <img src="https://placehold.co/100" className="w-full rounded-sm" alt="" />
+                            <img
+                                src={item.url_image ? item.url_image : "https://placehold.co/100"}
+                                className="w-full object-cover aspect-[4/3] rounded-sm"
+                                alt=""
+                            />
                             <div className="flex justify-between pt-3">
                                 <div className="text-[16px]">{item.nom}</div>
                                 <div className="text-[16px]">{item.prix} Ar/kg</div>

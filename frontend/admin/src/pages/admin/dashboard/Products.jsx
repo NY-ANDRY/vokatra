@@ -1,14 +1,18 @@
 import { useNavigate } from "react-router-dom";
-import { useFetch } from "../../../hooks/useFetch";
-import { host } from "../../../config";
-import { Table, Thead, Tbody, Trh, Tr, Th, Td, Input, Label } from "../../../components/Balise";
+import { useFetch } from "../../../../../client/src/hooks/useFetch";
+import { host } from "../../../../../client/src/config";
 import { useEffect, useState } from "react";
+import Filtre_keywords from "../../../../../client/src/components/filtre/FIltre_keywords";
+import Filtre_prix from "../../../../../client/src/components/filtre/FIltre_prix";
+import Filtre_saisons from "../../../../../client/src/components/filtre/FIltre_saisons";
+import Filtre_categories from "../../../../../client/src/components/filtre/FIltre_categories";
+import { Table, Thead, Tbody, Th, Tr, Trh, Td } from "../../../../../client/src/components/Balise";
 
 const Products = () => {
     const navigate = useNavigate();
     const { data: products, loading: loading_products, error: error_products } = useFetch(`${host}/produits`);
+
     const [items, setItems] = useState([]);
-    const [keywords, setKeywords] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
 
@@ -22,41 +26,35 @@ const Products = () => {
         navigate(`/products/${id}`)
     }
 
-    useEffect(() => {
-        if (keywords != '') {
-            filterByKeywords(keywords)
-        } else {
-            if (products.items) {
-                setItems(products.items);
-            }
-        }
-    }, [keywords]);
-
-    const filterByKeywords = async (search) => {
-        try {
-            const response = await fetch(`${host}/produits?keywords=${search}`);
-            if (!response.ok) {
-                throw new Error("Failed to fetch data");
-            }
-            const data = await response.json();
-            setItems(data.items);
-        } catch (err) {
-            setError(err.message);
-        } finally {
-            setLoading(false);
+    const handleReset = () => {
+        if (products.items) {
+            setItems(products.items);
         }
     }
 
     return (
-        <div className="flex p-8 gap-12">
+        <div className="flex flex-col xl:flex-row p-2 xl:p-6 gap-12 h-full max-h-full overflow-auto relative">
 
-            <div className="flex w-72 pt-4 border-neutral-300 border-t-[1px]">
+            <div className="h-fit flex flex-col gap-4 w-full xl:w-72 pt-4 border-neutral-300 border-t-[1px]">
                 <div className="flex flex-col w-full gap-4">
-                    <Input onInput={(e) => { setKeywords(e.target.value) }} placeholder="Keyword" />
+                    <Filtre_keywords setItems={setItems} handleReset={handleReset} />
                 </div>
+
+                <div className="flex flex-col w-full gap-2 px-0 z-30">
+                    <Filtre_categories setItems={setItems} handleReset={handleReset} />
+                </div>
+
+                <div className="flex flex-col w-full gap-2 px-0 z-20">
+                    <Filtre_saisons setItems={setItems} handleReset={handleReset} />
+                </div>
+
+                <div className="flex flex-col w-full gap-0 px-0 z-10">
+                    <Filtre_prix setItems={setItems} handleReset={handleReset} />
+                </div>
+
             </div>
 
-            <div className="flex-1 flex justify-center items-center">
+            <div className="flex-1 flex justify-center h-fit">
                 <Table>
                     <Thead>
                         <Trh>

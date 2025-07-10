@@ -1,6 +1,3 @@
--- ✅ ROLES déjà insérés (aucun doublon ici)
-
--- 👤 UTILISATEURS
 INSERT INTO t_utilisateurs (nom, email, mot_de_passe, role_id) VALUES
 ('Alice Admin', 'admin@farm.com', 'pass_admin', 1),
 ('Bob Fermier', 'bob@farm.com', 'pass_bob', 3),
@@ -8,159 +5,229 @@ INSERT INTO t_utilisateurs (nom, email, mot_de_passe, role_id) VALUES
 ('Livio Livreur', 'livio@delivery.com', 'pass_livio', 4),
 ('Samuel Stock', 'sam@stock.com', 'pass_sam', 5);
 
--- 📂 CATÉGORIES
-INSERT INTO t_categories (nom) VALUES
-('Fruits'),
-('Légumes');
-
--- 🌦️ SAISONS
-INSERT INTO t_saisons (nom, date_debut, date_fin) VALUES
-('Printemps 2025', '2025-09-01', '2025-11-30'),
-('Été 2025', '2025-12-01', '2025-02-28');
-
--- 🛍️ PRODUITS AGRICOLES
-INSERT INTO t_produits (nom, description, prix, categorie_id) VALUES
-('Tomates bio', 'Tomates rouges issues de l’agriculture biologique', 2.50, 2),
-('Carottes fraîches', 'Carottes croquantes non traitées', 1.80, 2),
-('Pommes Golden', 'Pommes sucrées et juteuses', 3.20, 1),
-('Bananes mûres', 'Bananes locales savoureuses', 2.90, 1);
-
--- 🔗 PRODUIT-SAISON
-INSERT INTO t_produit_saison (produit_id, saison_id) VALUES
-(1, 1), (2, 1), (3, 2), (4, 2);
-
--- 🖼️ IMAGES PRODUITS
-INSERT INTO t_produit_images (produit_id, url_image) VALUES
-(1, 'images/tomates.jpg'),
-(2, 'images/carottes.jpg'),
-(3, 'images/pommes.jpg'),
-(4, 'images/bananes.jpg');
-
--- 📦 STOCK PRODUITS
-INSERT INTO t_stocks_produits (produit_id, quantite, mouvement_id, date_maj) VALUES
-(1, 100, 1, '2025-05-05'),
-(2, 150, 1, '2025-06-05'),
-(2, 100, 1, '2025-06-05'),
-(2, -50, 2, '2025-06-06'),
-(3, 80, 1, '2025-06-05'),
-(4, 120, 1, '2025-07-01');
-
--- 📦 PACK
-INSERT INTO t_packs (nom, description, reduction_percent, prix_total, statut_id) VALUES
-('Panier Fruité', 'Pack de fruits de saison', 10.00, 10.00, 1);
-
--- 📦 CONTENU DU PACK
-INSERT INTO t_pack_produits (pack_id, produit_id, quantite) VALUES
-(1, 3, 1), -- Pommes
-(1, 4, 1); -- Bananes
-
--- 🛒 PANIER CLIENT
-INSERT INTO t_paniers (utilisateur_id) VALUES
-(3); -- Claire Client
-
--- PRODUITS DANS PANIER
-INSERT INTO t_panier_produits (panier_id, produit_id, quantite) VALUES
-(1, 1, 2), -- Tomates
-(1, 2, 1); -- Carottes
-
--- PACK DANS PANIER
-INSERT INTO t_panier_packs (panier_id, pack_id, quantite) VALUES
-(1, 1, 1); -- Panier Fruité
-
--- 📦 COMMANDE
-INSERT INTO t_commandes (utilisateur_id, statut_id) VALUES
-(3, 1); -- Claire, En attente
-
--- COMMANDE : PRODUITS
-INSERT INTO t_commandes_produits (commande_id, produit_id, quantite) VALUES
-(1, 1, 2),
-(1, 2, 1);
-
--- COMMANDE : PACKS
-INSERT INTO t_commandes_packs (commande_id, pack_id, quantite) VALUES
-(1, 1, 1);
-
--- 💰 FACTURE
-INSERT INTO t_factures (commande_id, montant_total, statut_id) VALUES
-(1, 14.80, 1); -- En attente de paiement
-
--- 💵 PAIEMENT (optionnel)
-INSERT INTO t_paiements (facture_id, montant) VALUES
-(1, 14.80);
-
--- 📍 LIEU DE LIVRAISON
-INSERT INTO t_livraisons_lieux (nom, adresse) VALUES
-('Ferme locale Antsirabe', 'RN7, PK 174, Antsirabe');
-
 INSERT INTO t_livraisons_lieux (nom, adresse, latitude, longitude) VALUES
-('locale 1 Antananarivo', 'RN7, PK 174, Antanarivo', -18.8792, 47.5079),
-('locale 2 Antananarivo', 'RN5, PK 174, Antanarivo', -18.8850, 47.5100);
+('Antananarivo Centre', 'RN7, PK 174, Antsirabe', -18.879200, 47.507900),
+('Ambohimanambola', 'RN7, PK 174, Antanarivo', -18.943000, 47.525500),
+('Itaosy', 'RN5, PK 174, Antanarivo',-18.920700, 47.478300);
+
+INSERT INTO t_categories (nom) VALUES
+('Fruits'),       -- id = 1
+('Légumes'),      -- id = 2
+('Céréales');     -- id = 3
+
+INSERT INTO t_saisons (nom, date_debut, date_fin) VALUES
+('Printemps 2025', '2025-09-01', '2025-11-30'), -- id = 1
+('Été 2025', '2025-12-01', '2026-02-28'),       -- id = 2
+('Automne 2026', '2026-03-01', '2026-05-31');   -- id = 3
+
+-- Fruits
+INSERT INTO t_produits (nom, description, prix, categorie_id) VALUES
+('Mangue', 'Fruit tropical juteux et sucré.', 2500, 1),
+('Banane', 'Riche en potassium, idéale pour l’énergie.', 1200, 1),
+('Pomme', 'Croquante et sucrée, idéale en collation.', 1800, 1),
+
+-- Légumes
+('Carotte', 'Bonne pour la vue, riche en bêta-carotène.', 1000, 2),
+('Tomate', 'Utilisée dans de nombreux plats.', 1500, 2),
+('Pomme de terre', 'Aliment de base, riche en amidon.', 900, 2),
+('Épinard', 'Feuille verte riche en fer.', 1300, 2),
+
+-- Céréales
+('Maïs', 'Utilisé pour la farine, les céréales et le pop-corn.', 1100, 3),
+('Riz', 'Céréale de base dans de nombreux pays.', 900, 3),
+('Blé', 'Utilisé pour le pain, les pâtes et plus.', 1000, 3);
+
+-- Fruits
+INSERT INTO t_produit_saison (produit_id, saison_id) VALUES
+(1, 2), -- Mangue - Été
+(2, 2), -- Banane - Été
+(3, 3), -- Pomme - Automne
+
+-- Légumes
+(4, 1), -- Carotte - Printemps
+(5, 2), -- Tomate - Été
+(6, 3), -- Pomme de terre - Automne
+(7, 1), -- Épinard - Printemps
+
+-- Céréales
+(8, 2), -- Maïs - Été
+(9, 3), -- Riz - Automne
+(10, 3); -- Blé - Automne
+
 
 -- 🚚 DÉLAI ET PRIX LIVRAISON
 INSERT INTO t_livraisons_prix (delai_jour, prix) VALUES
 (2, 3.00),
 (4, 1.50);
 
--- 🚛 LIVRAISON
-INSERT INTO t_livraisons (commande_id, lieu_livraison_id, prix, statut_id) VALUES
-(1, 1, 3.00, 1); -- Préparée
-
-CREATE TABLE t_paiements_mode (
-  	id SERIAL PRIMARY KEY,
-  	nom VARCHAR(30)
-);
-
 INSERT INTO t_paiements_mode (id, nom) VALUES
 (1, 'cash'),
 (2, 'mvola');
 
---
--- Données pour les commandes et factures de Juin 2025
---
--- Jour 1
-INSERT INTO t_commandes (utilisateur_id, date_commande, statut_id) VALUES (3, '2025-06-01 10:00:00', 3);
-INSERT INTO t_commandes_produits (commande_id, produit_id, quantite) VALUES ((SELECT id FROM t_commandes WHERE date_commande = '2025-06-01 10:00:00'), 1, 2.5);
-INSERT INTO t_commandes_produits (commande_id, produit_id, quantite) VALUES ((SELECT id FROM t_commandes WHERE date_commande = '2025-06-01 10:00:00'), 3, 1.0);
-INSERT INTO t_factures (commande_id, date_facture, montant_total, statut_id) VALUES ((SELECT id FROM t_commandes WHERE date_commande = '2025-06-01 10:00:00'), '2025-06-01 10:05:00', 9.45, 2);
 
--- Jour 3
-INSERT INTO t_commandes (utilisateur_id, date_commande, statut_id) VALUES (3, '2025-06-03 14:30:00', 3);
-INSERT INTO t_commandes_produits (commande_id, produit_id, quantite) VALUES ((SELECT id FROM t_commandes WHERE date_commande = '2025-06-03 14:30:00'), 2, 3.0);
-INSERT INTO t_factures (commande_id, date_facture, montant_total, statut_id) VALUES ((SELECT id FROM t_commandes WHERE date_commande = '2025-06-03 14:30:00'), '2025-06-03 14:35:00', 5.40, 2);
 
--- Jour 7
-INSERT INTO t_commandes (utilisateur_id, date_commande, statut_id) VALUES (3, '2025-06-07 09:15:00', 3);
-INSERT INTO t_commandes_produits (commande_id, produit_id, quantite) VALUES ((SELECT id FROM t_commandes WHERE date_commande = '2025-06-07 09:15:00'), 4, 1.5);
-INSERT INTO t_factures (commande_id, date_facture, montant_total, statut_id) VALUES ((SELECT id FROM t_commandes WHERE date_commande = '2025-06-07 09:15:00'), '2025-06-07 09:20:00', 4.35, 2);
+INSERT INTO t_stocks_produits (produit_id, quantite, mouvement_id) VALUES
+(1, 100.00, 1),  -- Mangue
+(2, 150.00, 1),  -- Banane
+(3, 80.00, 1),   -- Pomme
+(4, 200.00, 1),  -- Carotte
+(5, 170.00, 1),  -- Tomate
+(6, 300.00, 1),  -- Pomme de terre
+(7, 120.00, 1),  -- Épinard
+(8, 250.00, 1),  -- Maïs
+(9, 500.00, 1),  -- Riz
+(10, 400.00, 1); -- Blé
 
--- Jour 10
-INSERT INTO t_commandes (utilisateur_id, date_commande, statut_id) VALUES (3, '2025-06-10 11:00:00', 3);
-INSERT INTO t_commandes_produits (commande_id, produit_id, quantite) VALUES ((SELECT id FROM t_commandes WHERE date_commande = '2025-06-10 11:00:00'), 1, 1.0);
-INSERT INTO t_commandes_produits (commande_id, produit_id, quantite) VALUES ((SELECT id FROM t_commandes WHERE date_commande = '2025-06-10 11:00:00'), 2, 2.0);
-INSERT INTO t_commandes_produits (commande_id, produit_id, quantite) VALUES ((SELECT id FROM t_commandes WHERE date_commande = '2025-06-10 11:00:00'), 4, 1.0);
-INSERT INTO t_factures (commande_id, date_facture, montant_total, statut_id) VALUES ((SELECT id FROM t_commandes WHERE date_commande = '2025-06-10 11:00:00'), '2025-06-10 11:05:00', 9.0, 2);
 
--- Jour 15
-INSERT INTO t_commandes (utilisateur_id, date_commande, statut_id) VALUES (3, '2025-06-15 16:45:00', 3);
-INSERT INTO t_commandes_produits (commande_id, produit_id, quantite) VALUES ((SELECT id FROM t_commandes WHERE date_commande = '2025-06-15 16:45:00'), 3, 2.0);
-INSERT INTO t_factures (commande_id, date_facture, montant_total, statut_id) VALUES ((SELECT id FROM t_commandes WHERE date_commande = '2025-06-15 16:45:00'), '2025-06-15 16:50:00', 6.40, 2);
+-- PACK 1 : Été Tropical
+INSERT INTO t_packs (id, nom, description, reduction_percent, prix_total, statut_id)
+VALUES (1, 'Pack Été Tropical', 'Un mélange rafraîchissant de fruits et légumes d’été.', 10.00, 162450, 1);
 
--- Jour 20
-INSERT INTO t_commandes (utilisateur_id, date_commande, statut_id) VALUES (3, '2025-06-20 13:00:00', 3);
-INSERT INTO t_commandes_produits (commande_id, produit_id, quantite) VALUES ((SELECT id FROM t_commandes WHERE date_commande = '2025-06-20 13:00:00'), 1, 3.0);
-INSERT INTO t_commandes_produits (commande_id, produit_id, quantite) VALUES ((SELECT id FROM t_commandes WHERE date_commande = '2025-06-20 13:00:00'), 4, 0.5);
-INSERT INTO t_factures (commande_id, date_facture, montant_total, statut_id) VALUES ((SELECT id FROM t_commandes WHERE date_commande = '2025-06-20 13:00:00'), '2025-06-20 13:05:00', 8.95, 2);
+INSERT INTO t_pack_produits (pack_id, produit_id, quantite) VALUES
+(1, 1, 30),  -- Mangue
+(1, 2, 40),  -- Banane
+(1, 5, 20),  -- Tomate
+(1, 8, 25);  -- Maïs
 
--- Jour 25
-INSERT INTO t_commandes (utilisateur_id, date_commande, statut_id) VALUES (3, '2025-06-25 08:30:00', 3);
-INSERT INTO t_commandes_produits (commande_id, produit_id, quantite) VALUES ((SELECT id FROM t_commandes WHERE date_commande = '2025-06-25 08:30:00'), 2, 1.5);
-INSERT INTO t_commandes_produits (commande_id, produit_id, quantite) VALUES ((SELECT id FROM t_commandes WHERE date_commande = '2025-06-25 08:30:00'), 3, 1.0);
-INSERT INTO t_factures (commande_id, date_facture, montant_total, statut_id) VALUES ((SELECT id FROM t_commandes WHERE date_commande = '2025-06-25 08:30:00'), '2025-06-25 08:35:00', 5.90, 2);
+-- PACK 2 : Santé Verte
+INSERT INTO t_packs (id, nom, description, reduction_percent, prix_total, statut_id)
+VALUES (2, 'Pack Santé Verte', 'Des légumes riches en fibres et vitamines pour votre santé.', 5.00, 122075, 1);
 
--- Jour 28
-INSERT INTO t_commandes (utilisateur_id, date_commande, statut_id) VALUES (3, '2025-06-28 17:00:00', 3);
-INSERT INTO t_commandes_produits (commande_id, produit_id, quantite) VALUES ((SELECT id FROM t_commandes WHERE date_commande = '2025-06-28 17:00:00'), 1, 1.0);
-INSERT INTO t_commandes_produits (commande_id, produit_id, quantite) VALUES ((SELECT id FROM t_commandes WHERE date_commande = '2025-06-28 17:00:00'), 2, 1.0);
-INSERT INTO t_commandes_produits (commande_id, produit_id, quantite) VALUES ((SELECT id FROM t_commandes WHERE date_commande = '2025-06-28 17:00:00'), 3, 1.0);
-INSERT INTO t_commandes_produits (commande_id, produit_id, quantite) VALUES ((SELECT id FROM t_commandes WHERE date_commande = '2025-06-28 17:00:00'), 4, 1.0);
-INSERT INTO t_factures (commande_id, date_facture, montant_total, statut_id) VALUES ((SELECT id FROM t_commandes WHERE date_commande = '2025-06-28 17:00:00'), '2025-06-28 17:05:00', 10.40, 2);
+INSERT INTO t_pack_produits (pack_id, produit_id, quantite) VALUES
+(2, 4, 60),  -- Carotte
+(2, 7, 25),  -- Épinard
+(2, 6, 40);  -- Pomme de terre
+
+-- PACK 3 : Automne Céréalier
+INSERT INTO t_packs (id, nom, description, reduction_percent, prix_total, statut_id)
+VALUES (3, 'Pack Automne Céréalier', 'Idéal pour cuisiner des plats d’automne avec céréales et fruits.', 8.00, 119600, 1);
+
+INSERT INTO t_pack_produits (pack_id, produit_id, quantite) VALUES
+(3, 9, 60),  -- Riz
+(3, 10, 40), -- Blé
+(3, 3, 20);  -- Pomme
+
+
+
+INSERT INTO t_produit_images (produit_id, url_image) VALUES
+(1, '/assets/img/mangue.jpg'),
+(2, '/assets/img/banane.jpg'),
+(3, '/assets/img/pomme.jpg'),
+(4, '/assets/img/carotte.jpg'),
+(5, '/assets/img/tomate.jpg'),
+(6, '/assets/img/patate.jpg'),
+(7, '/assets/img/epinard.jpg'),
+(8, '/assets/img/mais.jpg'),
+(9, '/assets/img/riz.jpg'),
+(10, '/assets/img/ble.jpg');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- Commande 1 - 10 juin 2025
+INSERT INTO t_commandes (date_commande, statut_id)
+VALUES ('2025-06-10 10:30:00', 3); -- Payée
+
+-- Commande 2 - 25 juin 2025
+INSERT INTO t_commandes (date_commande, statut_id)
+VALUES ('2025-06-25 14:45:00', 3); -- Payée
+
+-- Commande 3 - 3 juillet 2025
+INSERT INTO t_commandes (date_commande, statut_id)
+VALUES ('2025-07-03 09:20:00', 3); -- Payée
+
+-- Commande 4 - 8 juillet 2025
+INSERT INTO t_commandes (date_commande, statut_id)
+VALUES ('2025-07-08 16:10:00', 3); -- Payée
+
+
+
+
+
+-- Commande 1 : 2 packs
+INSERT INTO t_commandes_packs (commande_id, pack_id, quantite) VALUES
+(1, 1, 1),
+(1, 3, 1);
+
+-- Commande 2 : 3 produits
+INSERT INTO t_commandes_produits (commande_id, produit_id, quantite) VALUES
+(2, 1, 10),  -- Mangue
+(2, 5, 5),   -- Tomate
+(2, 9, 20);  -- Riz
+
+-- Commande 3 : 1 pack + 2 produits
+INSERT INTO t_commandes_packs (commande_id, pack_id, quantite) VALUES
+(3, 2, 1);
+INSERT INTO t_commandes_produits (commande_id, produit_id, quantite) VALUES
+(3, 4, 10),  -- Carotte
+(3, 10, 15); -- Blé
+
+-- Commande 4 : 2 produits
+INSERT INTO t_commandes_produits (commande_id, produit_id, quantite) VALUES
+(4, 2, 20),  -- Banane
+(4, 8, 10);  -- Maïs
+
+
+
+
+-- Facture pour commande 1
+INSERT INTO t_factures (commande_id, nom_client, montant_total, date_facture, statut_id)
+VALUES (1, 'Client 1', 162450 + 119600, '2025-06-10 11:00:00', 2);
+
+-- Facture pour commande 2
+INSERT INTO t_factures (commande_id, nom_client, montant_total, date_facture, statut_id)
+VALUES (2, 'Client 2', 50500, '2025-06-25 15:00:00', 2);
+
+-- Facture pour commande 3
+INSERT INTO t_factures (commande_id, nom_client, montant_total, date_facture, statut_id)
+VALUES (3, 'Client 3', 147075, '2025-07-03 10:00:00', 2);
+
+-- Facture pour commande 4
+INSERT INTO t_factures (commande_id, nom_client, montant_total, date_facture, statut_id)
+VALUES (4, 'Client 4', 35000, '2025-07-08 17:00:00', 2);
+
+
+
+
+
+
+
+-- 📦 Commande 1 - 10 juin 2025 10:30
+INSERT INTO t_stocks_produits (produit_id, quantite, mouvement_id, date_maj) VALUES
+(1, -30.00, 2, '2025-06-10 10:30:00'),  -- Mangue (Pack 1)
+(2, -40.00, 2, '2025-06-10 10:30:00'),  -- Banane (Pack 1)
+(5, -20.00, 2, '2025-06-10 10:30:00'),  -- Tomate (Pack 1)
+(8, -25.00, 2, '2025-06-10 10:30:00'),  -- Maïs (Pack 1)
+(9, -60.00, 2, '2025-06-10 10:30:00'),  -- Riz (Pack 3)
+(10, -40.00, 2, '2025-06-10 10:30:00'), -- Blé (Pack 3)
+(3, -20.00, 2, '2025-06-10 10:30:00');  -- Pomme (Pack 3)
+
+-- 🛒 Commande 2 - 25 juin 2025 14:45
+INSERT INTO t_stocks_produits (produit_id, quantite, mouvement_id, date_maj) VALUES
+(1, -10.00, 2, '2025-06-25 14:45:00'),  -- Mangue
+(5, -5.00, 2, '2025-06-25 14:45:00'),   -- Tomate
+(9, -20.00, 2, '2025-06-25 14:45:00');  -- Riz
+
+-- 🛒 Commande 3 - 3 juillet 2025 09:20
+INSERT INTO t_stocks_produits (produit_id, quantite, mouvement_id, date_maj) VALUES
+(4, -60.00, 2, '2025-07-03 09:20:00'),  -- Carotte (Pack 2)
+(7, -25.00, 2, '2025-07-03 09:20:00'),  -- Épinard (Pack 2)
+(6, -40.00, 2, '2025-07-03 09:20:00'),  -- Pomme de terre (Pack 2)
+(4, -10.00, 2, '2025-07-03 09:20:00'),  -- Carotte (produit seul)
+(10, -15.00, 2, '2025-07-03 09:20:00'); -- Blé (produit seul)
+
+-- 🛒 Commande 4 - 8 juillet 2025 16:10
+INSERT INTO t_stocks_produits (produit_id, quantite, mouvement_id, date_maj) VALUES
+(2, -20.00, 2, '2025-07-08 16:10:00'),  -- Banane
+(8, -10.00, 2, '2025-07-08 16:10:00');  -- Maïs

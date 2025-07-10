@@ -101,7 +101,7 @@ const Products = () => {
 
     return (
         <div className="flex w-full justify-center max-h-full overflow-auto">
-            
+
             <Alert show={showError}>{error}</Alert>
 
             <div className="w-[1100px] p-4 pt-6 flex flex-col gap-4">
@@ -110,7 +110,11 @@ const Products = () => {
                 <div className="flex flex-col xl:flex-row w-full gap-8">
 
                     <div className="flex flex-col w-[400px]">
-                        <img src="https://placehold.co/100" className="w-full rounded-sm" alt="" />
+                        <img
+                            src={item.url_image ? item.url_image : "https://placehold.co/100"}
+                            className="w-full object-cover aspect-[4/3] rounded-sm"
+                            alt=""
+                        />
                     </div>
 
                     <div className="flex flex-col min-w-[400px] min-h-full justify-baseline xl:justify-between">

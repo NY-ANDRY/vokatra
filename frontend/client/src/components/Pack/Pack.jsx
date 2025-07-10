@@ -89,8 +89,8 @@ const Packs = ({ id }) => {
                         <div className="text-[14px] text-gray-500">{item && item.description}</div>
                     </div>
                     <div className="flex flex-col items-end pt-3 gap-1">
-                        <div className="text-[24px] text-gray-900">- {item.reduction_percent} %</div>
-                        <div className="text-[14px] text-gray-500">{item.prix_calcule_avec_reduction} Ar</div>
+                        <div className="text-[24px] text-gray-900">{item.prix_calcule_avec_reduction} Ar</div>
+                        <div className="text-[14px] text-gray-500">- {item.reduction_percent} %</div>
                     </div>
                 </div>
                 <div className="flex gap-4 pt-2 pb-2">
@@ -104,7 +104,11 @@ const Packs = ({ id }) => {
                             <div className="flex flex-col w-auto">
                                 <div className="p-0">{product.produit_nom}</div>
                                 <div className="p-0">
-                                    <img src="https://placehold.co/100" className="w-[200px] rounded-sm" alt="" />
+                                    <img
+                                        src={product.produit_image ? product.produit_image : "https://placehold.co/100"}
+                                        className="w-[200px] h-[200px] object-contain rounded-sm"
+                                        alt=""
+                                    />
                                 </div>
                                 <div className="p-0">{product.quantite} kg</div>
                             </div>

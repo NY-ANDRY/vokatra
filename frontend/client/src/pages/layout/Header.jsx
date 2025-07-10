@@ -19,12 +19,12 @@ const Header = () => {
         <>
             <header className="h-12 flex items-center justify-between gap-24 px-0 border-b-[0.6px] border-zinc-300 text-neutral-400 overflow-hidden">
                 <div className="flex items-center text-xs relative h-5 gap-4">
-                    <div className="p-2 hover:bg-gray-100 cursor-pointer" onClick={() => { setOpenMenu(!openMenu) }}>
+                    {/* <div className="p-2 hover:bg-gray-100 cursor-pointer" onClick={() => { setOpenMenu(!openMenu) }}>
                         <img src="/assets/svg/menu.svg" className="w-8 " alt="" />
-                    </div>
+                    </div> */}
                     <Menu />
                     <Link to={"/"}>
-                        <div className="text-neutral-900 font-[i-b] text-sm xl:text-xl" >
+                        <div className="text-neutral-900 font-[i-b] text-sm xl:text-xl pl-4" >
                             {headerTitle}
                         </div>
                     </Link>

@@ -129,6 +129,58 @@ CREATE TABLE t_pack_produits (
     FOREIGN KEY (produit_id) REFERENCES t_produits(id)
 );
 
+CREATE OR REPLACE VIEW v_packs AS
+SELECT 
+    pk.id AS pack_id,
+    pk.nom AS pack_nom,
+    pk.description,
+    pk.reduction_percent,
+    pk.prix_total AS prix_pack_apres_reduction,
+
+    ROUND(SUM(p.prix * pp.quantite), 2) AS prix_sans_reduction,
+    ROUND(SUM(p.prix * pp.quantite) * (1 - pk.reduction_percent / 100), 2) AS prix_calcule_avec_reduction,
+
+    sp.id AS statut_id,
+    sp.nom AS statut_nom,
+
+    COUNT(pp.id) AS nombre_produits_differents,
+    SUM(pp.quantite) AS quantite_totale,
+    STRING_AGG(p.nom || ' (x' || pp.quantite || ')', ', ') AS produits_contenus
+
+FROM t_packs pk
+JOIN t_pack_produits pp ON pk.id = pp.pack_id
+JOIN t_produits p ON pp.produit_id = p.id
+LEFT JOIN t_statuts_packs sp ON pk.statut_id = sp.id
+
+GROUP BY 
+    pk.id, pk.nom, pk.description, pk.reduction_percent, pk.prix_total,
+    sp.id, sp.nom;
+    
+CREATE OR REPLACE VIEW v_packs_produits AS
+SELECT
+    pp.id AS pack_produit_id,
+    pp.pack_id,
+    pk.nom AS pack_nom,
+    pp.produit_id,
+    p.nom AS produit_nom,
+    p.description AS produit_description,
+    p.prix AS produit_prix,
+    p.categorie_id,
+    c.nom AS categorie_nom,
+    pp.quantite,
+    
+    (
+        SELECT url_image
+        FROM t_produit_images
+        WHERE produit_id = p.id
+        LIMIT 1
+    ) AS produit_image
+    
+FROM t_pack_produits pp
+JOIN t_packs pk ON pp.pack_id = pk.id
+JOIN t_produits p ON pp.produit_id = p.id
+JOIN t_categories c ON p.categorie_id = c.id;
+
 CREATE TABLE t_paniers (
     id SERIAL PRIMARY KEY,
     utilisateur_id INT,
@@ -338,6 +390,18 @@ FROM t_panier_produits AS pp
 JOIN t_produits AS prd ON pp.produit_id = prd.id
 JOIN t_categories AS ctg ON ctg.id = prd.categorie_id;
 
+CREATE OR REPLACE VIEW v_paniers_packs AS
+SELECT 
+    pp.*,
+    pk.nom AS pack_nom,
+    pk.description AS pack_description,
+    pk.prix_total AS pack_prix,
+    pk.reduction_percent AS reduction_percent,
+    sp.nom AS statut_nom,
+    (pk.prix_total * pp.quantite) AS total
+FROM t_panier_packs AS pp
+JOIN t_packs AS pk ON pp.pack_id = pk.id
+LEFT JOIN t_statuts_packs sp ON pk.statut_id = sp.id;
 
 CREATE OR REPLACE VIEW v_commandes_produits AS
 SELECT 
@@ -351,6 +415,19 @@ SELECT
 FROM t_commandes_produits AS cp
 JOIN t_produits AS prd ON cp.produit_id = prd.id
 JOIN t_categories AS ctg ON ctg.id = prd.categorie_id;
+
+CREATE OR REPLACE VIEW v_commandes_packs AS
+SELECT 
+    cp.*,
+    pk.nom AS pack_nom,
+    pk.description AS pack_description,
+    pk.prix_total AS pack_prix,
+    pk.reduction_percent AS reduction_percent,
+    sp.nom AS statut_nom,
+    (pk.prix_total * cp.quantite) AS total
+FROM t_commandes_packs AS cp
+JOIN t_packs AS pk ON cp.pack_id = pk.id
+LEFT JOIN t_statuts_packs sp ON pk.statut_id = sp.id;
 
 CREATE OR REPLACE VIEW v_commandes AS
 SELECT 
