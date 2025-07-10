@@ -14,19 +14,15 @@ const Products = () => {
     const navigate = useNavigate();
 
     const { data, loading, error } = useFetch(`${host}/factures/${id}`);
-    const { data: modes_paiement, loading_mode_p, error_mode_p } = useFetch(`${host}/modes_paiements`);
-    const { data: lieux, loading_lieux, error_lieux } = useFetch(`${host}/livraisons_lieux`);
     const [items, setItem] = useState([]);
-
-    const [lieux_id, setLieux_id] = useState('');
-    const [mode_p_id, setMode_p_id] = useState('');
-    const [mode_p_label, setMode_p_label] = useState('');
-    const [numero, setNumero] = useState('');
-    const [nomClient, setNomClient] = useState('');
+    const [packs, setPacks] = useState([]);
 
     useEffect(() => {
         if (data.items) {
             setItem(data.items);
+        }
+        if (data.packs) {
+            setPacks(data.packs);
         }
     }, [data]);
 
@@ -41,8 +37,8 @@ const Products = () => {
         doc.text(`Client : ${data?.facture?.nom_client || ""}`, 14, 32);
         doc.text(`Facture N° : ${data?.facture?.id || ""}`, 14, 40);
 
-        const headers = [["Produit", "Prix (Ar)", "Quantité (kg)", "Total (Ar)"]];
-        const rows = items.map(item => [
+        const produitHeaders = [["Produit", "Prix (Ar)", "Quantité (kg)", "Total (Ar)"]];
+        const produitRows = items.map(item => [
             item.produit_nom,
             item.produit_prix.toString(),
             item.quantite.toString(),
@@ -51,21 +47,47 @@ const Products = () => {
 
         autoTable(doc, {
             startY: 50,
-            head: headers,
-            body: rows,
+            head: produitHeaders,
+            body: produitRows,
             styles: { fontSize: 12 },
             headStyles: { fillColor: [22, 160, 133] },
             margin: { left: 14, right: 14 },
         });
 
-        const finalY = doc.lastAutoTable.finalY || 50;
+        let finalY = doc.lastAutoTable.finalY || 50;
+
+        if (packs.length > 0) {
+            const packHeaders = [["Pack", "Prix (Ar)", "Quantité (kg)", "Total (Ar)"]];
+            const packRows = packs.map(pack => [
+                pack.pack_nom,
+                pack.pack_prix.toString(),
+                pack.quantite.toString(),
+                pack.total.toString(),
+            ]);
+
+            autoTable(doc, {
+                startY: finalY + 10,
+                head: packHeaders,
+                body: packRows,
+                styles: { fontSize: 12 },
+                headStyles: { fillColor: [52, 152, 219] },
+                margin: { left: 14, right: 14 },
+            });
+
+            finalY = doc.lastAutoTable.finalY || finalY + 10;
+        }
 
         doc.setFontSize(14);
         doc.text(`Total payé : ${data?.facture?.montant_total || ""} Ar`, 14, finalY + 10);
         doc.text(`État : ${data?.facture?.statut_facture || ""}`, 14, finalY + 20);
 
+        doc.setFontSize(12);
+        doc.text(`Livraison : ${data?.facture?.date_livraison || ""}`, 14, finalY + 30);
+        doc.text(`Lieu : ${data?.facture?.lieu_nom || ""}`, 14, finalY + 38);
+
         doc.save(`facture_${data?.facture?.id || "export"}.pdf`);
     };
+
 
 
 
@@ -82,31 +104,64 @@ const Products = () => {
                     facture numero: {data.facture && data.facture.id}
                 </div>
 
-                <div className="flex-1 flex justify-center items-center">
-                    <Table>
-                        <Thead>
-                            <Trh>
-                                <Th>produit</Th>
-                                <Th>prix (Ar)</Th>
-                                <Th>quantite (kg)</Th>
-                                <Th>total (Ar)</Th>
-                            </Trh>
-                        </Thead>
-                        <Tbody>
+                <div className="flex-1 flex flex-col justify-center items-center gap-2">
+                    {(items && items.length > 0) && (
 
-                            {items.map((item, i) => (
+                        <Table>
+                            <Thead>
+                                <Trh>
+                                    <Th>produit</Th>
+                                    <Th>prix (Ar)</Th>
+                                    <Th>quantite (kg)</Th>
+                                    <Th>total (Ar)</Th>
+                                </Trh>
+                            </Thead>
+                            <Tbody>
 
-                                <Tr key={i}>
-                                    <Td>{item.produit_nom}</Td>
-                                    <Td>{item.produit_prix}</Td>
-                                    <Td>{item.quantite}</Td>
-                                    <Td>{item.total}</Td>
-                                </Tr>
+                                {items.map((item, i) => (
 
-                            ))}
+                                    <Tr key={i}>
+                                        <Td>{item.produit_nom}</Td>
+                                        <Td>{item.produit_prix}</Td>
+                                        <Td>{item.quantite}</Td>
+                                        <Td>{item.total}</Td>
+                                    </Tr>
 
-                        </Tbody>
-                    </Table>
+                                ))}
+
+                            </Tbody>
+                        </Table>
+
+                    )}
+
+                    {(packs && packs.length > 0) && (
+
+                        <Table>
+                            <Thead>
+                                <Trh>
+                                    <Th>pack</Th>
+                                    <Th>prix (Ar)</Th>
+                                    <Th>quantite (kg)</Th>
+                                    <Th>total (Ar)</Th>
+                                </Trh>
+                            </Thead>
+                            <Tbody>
+
+                                {packs.map((item, i) => (
+
+                                    <Tr key={i}>
+                                        <Td>{item.pack_nom}</Td>
+                                        <Td>{item.pack_prix}</Td>
+                                        <Td>{item.quantite}</Td>
+                                        <Td>{item.total}</Td>
+                                    </Tr>
+
+                                ))}
+
+                            </Tbody>
+                        </Table>
+                    )}
+
                 </div>
 
                 <div className="flex justify-between pt-3">

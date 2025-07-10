@@ -9,6 +9,7 @@ use App\Http\Controllers\Livraisons_lieux;
 use App\Http\Controllers\Packs;
 use App\Http\Controllers\Paiements_mode;
 use App\Http\Controllers\Paniers;
+use App\Http\Controllers\Paniers_packs;
 use App\Http\Controllers\Paniers_products;
 use App\Http\Controllers\Produits;
 use App\Http\Controllers\Saisons;
@@ -43,12 +44,13 @@ Route::prefix('/api')->group(function () {
     Route::delete('/paniers', [Paniers::class, 'delete']);
 
     Route::delete('/paniers_products', [Paniers_products::class, 'delete']);
+    Route::delete('/paniers_packs', [Paniers_packs::class, 'delete']);
 
     Route::get('/commandes', [Commandes::class, 'index']);
     Route::post('/commandes', [Commandes::class, 'store']);
     Route::get('/commandes/{id}', [Commandes::class, 'get']);
 
-    Route::get('/factures', [Factures::class, 'all']);
+    Route::get('/factures', [Factures::class, 'index']);
     Route::post('/factures', [Factures::class, 'store']);
     Route::get('/factures/{id}', [Factures::class, 'get']);
 

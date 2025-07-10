@@ -26,6 +26,19 @@ class T_commandes extends Model
 
             $commande_prd->save();
         }
+
+        $items_packs = V_paniers_packs::where("panier_id", "=", $panier_id)->get();
+
+        foreach ($items_packs as $key => $item) {
+            $commande_pack = new T_commandes_packs();
+            $commande_pack->commande_id = $result->id;
+            $commande_pack->pack_id = $item->pack_id;
+            $commande_pack->quantite = $item->quantite;
+
+            $commande_pack->save();
+        }
+
+
         $panier = T_paniers::find($panier_id);
         $panier->delete();
 

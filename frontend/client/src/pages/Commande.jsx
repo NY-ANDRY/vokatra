@@ -30,6 +30,7 @@ const Commande = () => {
     const { data: modes_paiement, loading_mode_p, error_mode_p } = useFetch(`${host}/modes_paiements`);
     const { data: lieux, loading_lieux, error_lieux } = useFetch(`${host}/livraisons_lieux`);
     const [items, setItem] = useState([]);
+    const [packs, setPacks] = useState([]);
     const [total, setTotal] = useState(0);
 
     const [date_heure_livraison, setDate_heure_livraison] = useState('');
@@ -48,6 +49,9 @@ const Commande = () => {
     useEffect(() => {
         if (data.items) {
             setItem(data.items);
+        }
+        if (data.packs) {
+            setPacks(data.packs);
         }
         if (data.total) {
             setTotal(data.total);
@@ -124,7 +128,7 @@ const Commande = () => {
                     commande numero: {data.commande && data.commande.id}
                 </div>
 
-                <div className="flex-1 flex justify-center items-center">
+                <div className="flex-1 flex flex-col gap-4 justify-center items-center">
                     <Table>
                         <Thead>
                             <Trh>
@@ -141,6 +145,30 @@ const Commande = () => {
                                 <Tr key={i}>
                                     <Td>{item.produit_nom}</Td>
                                     <Td>{item.produit_prix}</Td>
+                                    <Td>{item.quantite}</Td>
+                                    <Td>{item.total}</Td>
+                                </Tr>
+
+                            ))}
+
+                        </Tbody>
+                    </Table>
+                    <Table>
+                        <Thead>
+                            <Trh>
+                                <Th>pack</Th>
+                                <Th>prix (Ar)</Th>
+                                <Th>quantite (kg)</Th>
+                                <Th>total (Ar)</Th>
+                            </Trh>
+                        </Thead>
+                        <Tbody>
+
+                            {packs.map((item, i) => (
+
+                                <Tr key={i}>
+                                    <Td>{item.pack_nom}</Td>
+                                    <Td>{item.pack_prix}</Td>
                                     <Td>{item.quantite}</Td>
                                     <Td>{item.total}</Td>
                                 </Tr>

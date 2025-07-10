@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\T_panier_produits;
+use App\Models\T_panier_packs;
 use App\Models\V_paniers_packs;
 use App\Models\V_paniers_produits;
 use Illuminate\Http\Request;
 
-class Paniers_products extends Controller
+class Paniers_packs extends Controller
 {
     function delete()
     {
@@ -18,16 +18,16 @@ class Paniers_products extends Controller
         ];
 
         $id = request()->input("id");
-        $pp = T_panier_produits::find($id);
+        $pp = T_panier_packs::find($id);
         if (!empty($pp)) {
             $panier_id = $pp->panier_id;
             $pp->delete();
-            $items = V_paniers_produits::where("panier_id", "=", $panier_id)->get();
-            $total = V_paniers_produits::where("panier_id", "=", $panier_id)->sum("total");
+            $items = V_paniers_packs::where("panier_id", "=", $panier_id)->get();
+            $total = V_paniers_packs::where("panier_id", "=", $panier_id)->sum("total");
 
-            $packs_total = V_paniers_packs::where("panier_id", "=", $panier_id)->sum("total");
-            if (is_numeric($packs_total)) {
-                $total += $packs_total;
+            $produits_total = V_paniers_produits::where("panier_id", "=", $panier_id)->sum("total");
+            if (is_numeric($produits_total)) {
+                $total += $produits_total;
             }
 
             $result["items"] = $items;
@@ -39,5 +39,4 @@ class Paniers_products extends Controller
         }
 
         return response()->json($result);
-    }
-}
+    }}

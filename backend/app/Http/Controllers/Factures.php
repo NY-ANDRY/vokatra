@@ -7,6 +7,7 @@ use App\Models\T_factures;
 use App\Models\T_livraisons;
 use App\Models\T_stocks_produits;
 use App\Models\V_commandes;
+use App\Models\V_commandes_packs;
 use App\Models\V_commandes_produits;
 use App\Models\V_factures;
 use Illuminate\Http\Request;
@@ -63,28 +64,45 @@ class Factures extends Controller
         $result = [
             "facture" => null,
             "items" => [],
+            "packs" => [],
             "message" => "hoho"
         ];
 
         $facture = V_factures::find($id);
         $items = V_commandes_produits::where("commande_id", "=", $facture->commande_id)->get();
+        $packs = V_commandes_packs::where("commande_id", "=", $facture->commande_id)->get();
 
         $facture->montant_total = is_numeric($facture->montant_total) ? number_format($facture->montant_total, 2) : $facture->montant_total;
         $facture->total_commande = is_numeric($facture->total_commande) ? number_format($facture->total_commande, 2) : $facture->total_commande;
         $result["facture"] = $facture;
         $result["items"] = $items;
+        $result["packs"] = $packs;
 
         return response()->json($result);
     }
 
-    function all() {
+    // function index() {
+    //     $result = [
+    //         'ok' => true,
+    //         'items' => null
+    //     ];
+        
+    //     $id =request()->session()->get("facture");
+    //     $items = V_factures::where("id", "=", $id)->get();
+
+    //     $result["items"] = $items;
+
+    //     return response()->json($result);
+    // }
+
+    function index() {
         $result = [
             'ok' => true,
             'items' => null
         ];
         
         $id =request()->session()->get("facture");
-        $items = V_factures::where("id", "=", $id)->get();
+        $items = V_factures::all();
 
         $result["items"] = $items;
 

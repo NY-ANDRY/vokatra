@@ -11,6 +11,7 @@ const Products = () => {
 
     const { data, loading, error } = useFetch(`${host}/paniers`);
     const [items, setItem] = useState([]);
+    const [packs, setPacks] = useState([]);
     const [total, setTotal] = useState(0);
 
     useEffect(() => {
@@ -23,6 +24,9 @@ const Products = () => {
         }
         if (data.total) {
             setTotal(data.total);
+        }
+        if (data.packs) {
+            setPacks(data.packs)
         }
     }, [data]);
 
@@ -64,6 +68,47 @@ const Products = () => {
     const handleReset = async (id, product_id) => {
         handleDelete(id, product_id);
         navigate(`/products/${product_id}`);
+    }
+
+
+    const handleDeletePack = async (id, pack_id) => {
+        console.log("ok");
+
+        const url_stock = `${host}/paniers_packs`;
+
+        const data_send = {
+            id: id
+        };
+
+        try {
+            const response = await fetch(url_stock,
+                {
+                    method: "DELETE",
+                    body: JSON.stringify(data_send),
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            const result = await response.json();
+            if (result.ok && result.items) {
+                setPacks(result.items);
+                setTotal(result.total);
+            }
+        } catch (err) {
+            console.log(err.message);
+        } finally {
+            console.log("finally");
+
+        }
+    }
+
+    const handleResetPack = async (id, pack_id) => {
+        handleDeletePack(id, pack_id);
+        navigate(`/packs`);
     }
 
     const handleClick = async () => {
@@ -109,7 +154,7 @@ const Products = () => {
                     Panier numero: {data.panier && data.panier.id}
                 </div>
 
-                <div className="flex-1 flex justify-center items-center">
+                <div className="flex-1 flex flex-col gap-4 justify-center items-center">
                     <Table>
                         <Thead>
                             <Trh>
@@ -134,6 +179,40 @@ const Products = () => {
                                                 <img src="/assets/svg/delete.svg" alt="" />
                                             </div>
                                             <div onClick={() => handleReset(item.id, item.produit_id)} className="flex items-center justify-center hover:bg-neutral-400 active:bg-neutral-600 rounded-sm">
+                                                <img src="/assets/svg/reset.svg" alt="" />
+                                            </div>
+                                        </div>
+                                    </Td>
+                                </Tr>
+
+                            ))}
+
+                        </Tbody>
+                    </Table>
+                    <Table>
+                        <Thead>
+                            <Trh>
+                                <Th>pack</Th>
+                                <Th>prix (Ar)</Th>
+                                <Th>nomber</Th>
+                                <Th>total (Ar)</Th>
+                                <Th></Th>
+                            </Trh>
+                        </Thead>
+                        <Tbody>
+                            {packs.map((item, i) => (
+
+                                <Tr key={i} >
+                                    <Td>{item.pack_nom}</Td>
+                                    <Td>{item.pack_prix}</Td>
+                                    <Td>{item.quantite}</Td>
+                                    <Td>{item.total}</Td>
+                                    <Td>
+                                        <div className="flex w-6 xl:w-auto flex-col xl:flex-row items-center gap-2">
+                                            <div onClick={() => handleDeletePack(item.id, item.pack_id)} className="flex items-center justify-center hover:bg-neutral-400 active:bg-neutral-600 rounded-sm">
+                                                <img src="/assets/svg/delete.svg" alt="" />
+                                            </div>
+                                            <div onClick={() => handleResetPack(item.id, item.pack_id)} className="flex items-center justify-center hover:bg-neutral-400 active:bg-neutral-600 rounded-sm">
                                                 <img src="/assets/svg/reset.svg" alt="" />
                                             </div>
                                         </div>
