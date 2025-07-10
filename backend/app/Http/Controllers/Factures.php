@@ -31,12 +31,13 @@ class Factures extends Controller
 
         $total = V_commandes::where("id", "=", $commande_id)->first()->total;
         $facture = new T_factures();
+        $facture->utilisateur_id = 1;
         $facture->commande_id = $commande_id;
         $facture->montant_total = $total;
         $facture->statut_id = 2;
         $facture->nom_client = $nom;
         if (!empty($user)) {
-            $facture->utilisateur_id = $user;
+            // $facture->utilisateur_id = $user;
         }
         $facture->save();
         $livraison = new T_livraisons();
@@ -102,7 +103,8 @@ class Factures extends Controller
         ];
         
         $id =request()->session()->get("facture");
-        $items = V_factures::all();
+        // $items = V_factures::all();
+        $items = V_factures::where('utilisateur_id', 1)->get();
 
         $result["items"] = $items;
 

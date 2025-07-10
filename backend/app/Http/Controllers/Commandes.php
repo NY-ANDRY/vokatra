@@ -34,7 +34,8 @@ class Commandes extends Controller
         ];
 
         $id = request()->session()->get("commande");
-        $items = V_commandes::all();
+        // $items = V_commandes::all();
+        $items = V_commandes::where('utilisateur_id', 1)->get();
 
         $result["items"] = $items;
 
@@ -48,7 +49,8 @@ class Commandes extends Controller
             'commande' => null
         ];
 
-        $user_id = request()->session()->get("user");
+        // $user_id = request()->session()->get("user");
+        $user_id = 1;
         $panier_id = request()->session()->get("panier");
         if (empty($panier_id)) {
             $result = [
