@@ -82,7 +82,7 @@ const Packs = ({ id }) => {
 
     return (
         <>
-            <div className="flex flex-col w-full p-2 xl:w-[800px] xl:flex-col gap-2 border-b-[1px] pb-8 xl:pb-8 border-neutral-400">
+            <div className="flex flex-col w-full p-2 xl:w-[1000px] xl:flex-col gap-2 border-b-[1px] pb-8 xl:pb-8 border-neutral-400">
                 <div className="flex justify-between">
                     <div className="flex flex-col pt-3 gap-1">
                         <div className="text-[24px]">{item && item.pack_nom}</div>

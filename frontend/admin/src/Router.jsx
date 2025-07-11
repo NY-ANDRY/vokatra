@@ -6,8 +6,8 @@ import Test from './pages/Test';
 import Stock from './pages/admin/dashboard/Stock';
 
 const AppRoutes = [
-    { path: '/', element: <Home /> },
-    { path: '/home', redirect: "/" },
+    { path: '/', redirect: "/dashboard" },
+    { path: '/home', redirect: "/dashboard" },
     { path: '/dashboard', element: <Activity /> },
     { path: '/products', element: <Products /> },
     { path: '/products/:id', element: <Productsid /> },

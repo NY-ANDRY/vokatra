@@ -13,7 +13,7 @@ import Factures from './pages/Factures';
 const AppRoutes = [
     { path: '/', element: <Home /> },
     { path: '/home', redirect: "/" },
-    { path: '/dashboard', element: <Activity /> },
+    // { path: '/dashboard', element: <Activity /> },
     { path: '/products', element: <Products /> },
     { path: '/products/:id', element: <Productsid /> },
     { path: '/packs', element: <Pack /> },
