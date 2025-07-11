@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { fade } from "../animations/Index";
 import { usePanier } from "../../contexts/PanierContext";
+import Alert from "../alert/Alert";
 
 const Packs = ({ id }) => {
     const navigate = useNavigate();
@@ -18,7 +19,8 @@ const Packs = ({ id }) => {
     const [nb, setNb] = useState(1);
 
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(false);
+    const [error, setError] = useState('');
+    const [showError, setShowError] = useState(false);
 
     useEffect(() => {
         if (pack.item) {
@@ -41,11 +43,11 @@ const Packs = ({ id }) => {
 
     const handleSubmit = async () => {
 
-        const url_stock = `${host}/paniers`;
+        const url_stock = `${host}/paniers_packs`;
 
         const data_send = {
             pack_id: id,
-            pack_quantity: nb
+            quantity: nb
         };
 
         try {
@@ -66,11 +68,11 @@ const Packs = ({ id }) => {
                 setOpenPanier(true);
                 // navigate("/packs");
             } else if (result.message) {
-                // setError(result.message);
-                // setShowError(true);
-                // setTimeout(() => {
-                //     setShowError(false);
-                // }, 2000);
+                setError(result.message);
+                setShowError(true);
+                setTimeout(() => {
+                    setShowError(false);
+                }, 2000);
             }
         } catch (err) {
             console.log(err.message);
@@ -83,6 +85,8 @@ const Packs = ({ id }) => {
     return (
         <>
             <div className="flex flex-col w-full p-2 xl:w-[1000px] xl:flex-col gap-2 border-b-[1px] pb-8 xl:pb-8 border-neutral-400">
+                <Alert show={showError}>{error}</Alert>
+
                 <div className="flex justify-between">
                     <div className="flex flex-col pt-3 gap-1">
                         <div className="text-[24px]">{item && item.pack_nom}</div>

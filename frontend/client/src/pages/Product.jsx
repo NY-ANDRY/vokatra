@@ -60,7 +60,7 @@ const Products = () => {
     const handleClick = async () => {
         console.log("ok");
 
-        const url_stock = `${host}/paniers`;
+        const url_stock = `${host}/paniers_produits`;
 
         const data_send = {
             produit_id: id,

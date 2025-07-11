@@ -39,6 +39,9 @@ Route::prefix('/api')->group(function () {
 
     Route::post('/stocks/produits', [Stock::class, 'store']);
 
+    Route::post('/paniers_produits', [Paniers_products::class, 'store']);
+    Route::post('/paniers_packs', [Paniers_packs::class, 'store']);
+
     Route::post('/paniers', [Paniers::class, 'store']);
     Route::get('/paniers', [Paniers::class, 'show']);
     Route::delete('/paniers', [Paniers::class, 'delete']);
