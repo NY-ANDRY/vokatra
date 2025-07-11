@@ -231,3 +231,25 @@ INSERT INTO t_stocks_produits (produit_id, quantite, mouvement_id, date_maj) VAL
 INSERT INTO t_stocks_produits (produit_id, quantite, mouvement_id, date_maj) VALUES
 (2, -20.00, 2, '2025-07-08 16:10:00'),  -- Banane
 (8, -10.00, 2, '2025-07-08 16:10:00');  -- Maïs
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+update t_commandes set utilisateur_id = null;
+update t_factures set utilisateur_id = null;
+
+
+
+
